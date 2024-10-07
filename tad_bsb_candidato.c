@@ -4,6 +4,25 @@
 #include "tad_bsb_candidato.h"
 
 // Funções auxiliares
+void imprimir_candidato_completo_bsb(Candidato c)
+{
+    printf("Nome: %s\n", c.nome);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("Genero: %c\n", c.genero);
+    printf("Grau de instrucao: %c\n", c.grau_instrucao);
+    printf("Cor/Raca: %c\n", c.cor_raca);
+    printf("--------------------\n");
+}
+
+void imprimir_candidato_simples_bsb(Candidato c)
+{
+    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
+}
 
 int comparar_candidatos_bsb(Candidato c1, Candidato c2)
 {
@@ -40,7 +59,7 @@ Vetor_bsb *bsb_criar()
     if (vet != NULL)
     {
         vet->tamanho = 0;
-        vet->capacidade = 10; // Define uma capacidade inicial
+        vet->capacidade = 100; // Define uma capacidade inicial
         vet->candidatos = (Candidato *)malloc(vet->capacidade * sizeof(Candidato));
         if (vet->candidatos == NULL)
         {
@@ -65,7 +84,7 @@ int bsb_inserir(Vetor_bsb *vet, Candidato candidato)
     // Verifica se é necessário redimensionar o vetor
     if (vet->tamanho == vet->capacidade)
     {
-        if (!bsb_redimensionar(vet, 2 * vet->capacidade))
+        if (!bsb_redimensionar(vet, 100 + vet->capacidade))
         {
             return 0; // Falha na realocação de memória
         }
@@ -102,11 +121,10 @@ int bsb_remover(Vetor_bsb *vet, Candidato candidato)
     vet->tamanho--;
 
     // Realoca o vetor para liberar memória (opcional - veja observações)
-    if (vet->tamanho < vet->capacidade / 2 && vet->capacidade > 10)
+    if (vet->capacidade - 100 > vet->tamanho)
     {
-        // Se o tamanho for menor que a metade da capacidade,
-        // reduz a capacidade pela metade, mas mantém um mínimo de 10.
-        if (!bsb_redimensionar(vet, vet->capacidade / 2))
+        // Verifica se é possível reduzir o vetor
+        if (!bsb_redimensionar(vet, vet->capacidade - 100))
         {
             // A realocação falhou, mas a remoção lógica foi feita.
             // Pode-se retornar 1 ou tratar o erro de outra forma.
@@ -166,24 +184,4 @@ void bsb_imprimir(Vetor_bsb *vet)
     {
         imprimir_candidato_simples_bsb(vet->candidatos[i]);
     }
-}
-
-void imprimir_candidato_completo_bsb(Candidato c)
-{
-    printf("Nome: %s\n", c.nome);
-    printf("Nome na urna: %s\n", c.nome_urna);
-    printf("Numero: %s\n", c.numero_urna);
-    printf("Estado: %s\n", c.estado);
-    printf("Cidade: %s\n", c.cidade);
-    printf("Cargo: %s\n", c.cargo);
-    printf("Partido: %s\n", c.sigla_partido);
-    printf("Genero: %c\n", c.genero);
-    printf("Grau de instrucao: %c\n", c.grau_instrucao);
-    printf("Cor/Raca: %c\n", c.cor_raca);
-    printf("--------------------\n");
-}
-
-void imprimir_candidato_simples_bsb(Candidato c)
-{
-    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }

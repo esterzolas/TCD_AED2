@@ -4,7 +4,6 @@
 #include "tad_abb_candidato.h"
 
 // Funções auxiliares
-
 int comparar_candidatos_abb(Candidato c1, Candidato c2)
 {
     int cmp = strcmp(c1.estado, c2.estado);

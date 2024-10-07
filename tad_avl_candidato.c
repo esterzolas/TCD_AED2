@@ -4,6 +4,39 @@
 #include "tad_avl_candidato.h"
 
 // Funções auxiliares
+int comparar_candidatos_avl(Candidato c1, Candidato c2)
+{
+    int cmp = strcmp(c1.estado, c2.estado);
+    if (cmp == 0)
+    {
+        cmp = strcmp(c1.cidade, c2.cidade);
+        if (cmp == 0)
+        {
+            cmp = strcmp(c1.numero_urna, c2.numero_urna);
+        }
+    }
+    return cmp;
+}
+
+void imprimir_candidato_completo_avl(Candidato c)
+{
+    printf("Nome: %s\n", c.nome);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("Genero: %c\n", c.genero);
+    printf("Grau de instrucao: %s\n", c.grau_instrucao);
+    printf("Cor/Raca: %s\n", c.cor_raca);
+    printf("--------------------\n");
+}
+
+void imprimir_candidato_simples_avl(Candidato c)
+{
+    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
+}
 
 int altura_no(No_avl *no)
 {
@@ -351,40 +384,4 @@ void avl_imprimir_pos_ordem(Arvore_avl *arv)
     {
         avl_imprimir_pos_ordem_no(arv->raiz);
     }
-}
-
-// Funções auxiliares
-
-int comparar_candidatos_avl(Candidato c1, Candidato c2)
-{
-    int cmp = strcmp(c1.estado, c2.estado);
-    if (cmp == 0)
-    {
-        cmp = strcmp(c1.cidade, c2.cidade);
-        if (cmp == 0)
-        {
-            cmp = strcmp(c1.numero_urna, c2.numero_urna);
-        }
-    }
-    return cmp;
-}
-
-void imprimir_candidato_completo_avl(Candidato c)
-{
-    printf("Nome: %s\n", c.nome);
-    printf("Nome na urna: %s\n", c.nome_urna);
-    printf("Numero: %s\n", c.numero_urna);
-    printf("Estado: %s\n", c.estado);
-    printf("Cidade: %s\n", c.cidade);
-    printf("Cargo: %s\n", c.cargo);
-    printf("Partido: %s\n", c.sigla_partido);
-    printf("Genero: %c\n", c.genero);
-    printf("Grau de instrucao: %s\n", c.grau_instrucao);
-    printf("Cor/Raca: %s\n", c.cor_raca);
-    printf("--------------------\n");
-}
-
-void imprimir_candidato_simples_avl(Candidato c)
-{
-    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }

@@ -24,7 +24,7 @@ typedef struct Candidato
     char genero[MAX_TAM_GENERO];
     char grau_instrucao[MAX_TAM_GRAU_INSTRUCAO];
     char cor_raca[MAX_TAM_COR_RACA];
-    
+
 } Candidato;
 
 // Estrutura do nó da ABB
@@ -41,14 +41,7 @@ typedef struct Arvore_abb
     No_abb *raiz;
 } Arvore_abb;
 
-// Funções auxiliares
-
-int comparar_candidatos_abb(Candidato c1, Candidato c2);
-void imprimir_candidato_comlpeto_abb(Candidato c);
-void imprimir_candidato_simples_abb(Candidato c);
-
 // Funções de manipulação da ABB
-
 Arvore_abb *abb_criar();
 void abb_liberar(Arvore_abb *arv);
 int abb_inserir(Arvore_abb *arv, Candidato candidato);
