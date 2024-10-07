@@ -11,10 +11,10 @@ int main()
     Vetor_bsb *vetor_bsb = bsb_criar();
 
     // Criação de candidatos
-    Candidato c1 = {"SP", "Sao Paulo", "12", "prefeito", "Joao Silva", "Joao", "PSDB", 'M', "Superior", "Indigena"};
-    Candidato c2 = {"SP", "Ribeirao Preto", "40", "prefeito", "Maria Souza", "Maria", "PT", 'F', "Ensino Medio", "Pardo"};
-    Candidato c3 = {"RJ", "Rio de Janeiro", "70111", "vereador", "Pedro Santos", "Pedro", "PSD", 'M', "Fundamental", "Branco"};
-    Candidato c4 = {"MG", "Belo Horizonte", "13", "prefeito", "Duda Salabert", "Duda", "PT", 'F', "Superior", "Branca"};
+    Candidato c1 = {"SP", "Sao Paulo", "12", "prefeito", "Joao Silva", "Joao", "PSDB", "Masculino", "Superior", "Indigena"};
+    Candidato c2 = {"SP", "Ribeirao Preto", "40", "prefeito", "Maria Souza", "Maria", "PT", "Feminino", "Ensino Medio", "Pardo"};
+    Candidato c3 = {"RJ", "Rio de Janeiro", "70111", "vereador", "Pedro Santos", "Pedro", "PSD", "Masculino", "Fundamental", "Branco"};
+    Candidato c4 = {"MG", "Belo Horizonte", "13", "prefeito", "Duda Salabert", "Duda", "PT", "Feminino", "Superior", "Branca"};
 
 
     // Inserção dos candidatos nas estruturas
