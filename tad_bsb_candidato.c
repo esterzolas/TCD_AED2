@@ -164,11 +164,11 @@ void bsb_imprimir(Vetor_bsb *vet)
 
     for (int i = 0; i < vet->tamanho; i++)
     {
-        imprimir_candidato_bsb(vet->candidatos[i]);
+        imprimir_candidato_simples_bsb(vet->candidatos[i]);
     }
 }
 
-void imprimir_candidato_bsb(Candidato c)
+void imprimir_candidato_completo_bsb(Candidato c)
 {
     printf("Nome: %s\n", c.nome);
     printf("Nome na urna: %s\n", c.nome_urna);
@@ -181,4 +181,9 @@ void imprimir_candidato_bsb(Candidato c)
     printf("Grau de instrucao: %c\n", c.grau_instrucao);
     printf("Cor/Raca: %c\n", c.cor_raca);
     printf("--------------------\n");
+}
+
+void imprimir_candidato_simples_bsb(Candidato c)
+{
+    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }

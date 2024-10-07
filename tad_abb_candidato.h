@@ -7,7 +7,9 @@
 #define MAX_TAM_NOME_URNA 20
 #define MAX_TAM_SIGLA_PARTIDO 10
 #define MAX_TAM_COR_RACA 10
-#define MAX_TAM_GRAU_INSTRUCAO 15
+#define MAX_TAM_GRAU_INSTRUCAO 40
+#define MAX_TAM_GENERO 20
+#define MAX_TAM_CARGO 20
 
 // Estrutura do candidato
 typedef struct Candidato
@@ -15,11 +17,11 @@ typedef struct Candidato
     char estado[MAX_TAM_ESTADO];
     char cidade[MAX_TAM_CIDADE];
     char numero_urna[6];
-    char cargo[9]; // "prefeito" ou "vereador"
+    char cargo[MAX_TAM_CARGO];
     char nome[MAX_TAM_NOME];
     char nome_urna[MAX_TAM_NOME_URNA];
     char sigla_partido[MAX_TAM_SIGLA_PARTIDO];
-    char genero;
+    char genero[MAX_TAM_GENERO];
     char grau_instrucao[MAX_TAM_GRAU_INSTRUCAO];
     char cor_raca[MAX_TAM_COR_RACA];
     
@@ -42,7 +44,8 @@ typedef struct Arvore_abb
 // Funções auxiliares
 
 int comparar_candidatos_abb(Candidato c1, Candidato c2);
-void imprimir_candidato_abb(Candidato c);
+void imprimir_candidato_comlpeto_abb(Candidato c);
+void imprimir_candidato_simples_abb(Candidato c);
 
 // Funções de manipulação da ABB
 

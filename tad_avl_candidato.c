@@ -304,7 +304,7 @@ void avl_imprimir_in_ordem_no(No_avl *no)
     if (no != NULL)
     {
         avl_imprimir_in_ordem_no(no->esq);
-        imprimir_candidato_avl(no->candidato);
+        imprimir_candidato_simples_avl(no->candidato);
         avl_imprimir_in_ordem_no(no->dir);
     }
 }
@@ -369,7 +369,7 @@ int comparar_candidatos_avl(Candidato c1, Candidato c2)
     return cmp;
 }
 
-void imprimir_candidato_avl(Candidato c)
+void imprimir_candidato_completo_avl(Candidato c)
 {
     printf("Nome: %s\n", c.nome);
     printf("Nome na urna: %s\n", c.nome_urna);
@@ -382,4 +382,9 @@ void imprimir_candidato_avl(Candidato c)
     printf("Grau de instrucao: %s\n", c.grau_instrucao);
     printf("Cor/Raca: %s\n", c.cor_raca);
     printf("--------------------\n");
+}
+
+void imprimir_candidato_simples_avl(Candidato c)
+{
+    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }

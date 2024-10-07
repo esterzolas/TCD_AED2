@@ -19,7 +19,7 @@ int comparar_candidatos_abb(Candidato c1, Candidato c2)
     return cmp;
 }
 
-void imprimir_candidato_abb(Candidato c)
+void imprimir_candidato_completo_abb(Candidato c)
 {
     printf("Nome: %s\n", c.nome);
     printf("Nome na urna: %s\n", c.nome_urna);
@@ -28,10 +28,15 @@ void imprimir_candidato_abb(Candidato c)
     printf("Cidade: %s\n", c.cidade);
     printf("Cargo: %s\n", c.cargo);
     printf("Partido: %s\n", c.sigla_partido);
-    printf("Genero: %c\n", c.genero);
+    printf("Genero: %s\n", c.genero);
     printf("Grau de instrucao: %s\n", c.grau_instrucao);
     printf("Cor/Raca: %s\n", c.cor_raca);
     printf("--------------------\n");
+}
+
+void imprimir_candidato_simples_abb(Candidato c)
+{
+    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }
 
 // Funções da ABB
@@ -231,7 +236,7 @@ void abb_imprimir_in_ordem_no(No_abb *no)
     if (no != NULL)
     {
         abb_imprimir_in_ordem_no(no->esq);
-        imprimir_candidato_abb(no->candidato);
+        imprimir_candidato_simples_abb(no->candidato);
         abb_imprimir_in_ordem_no(no->dir);
     }
 }

@@ -33,6 +33,7 @@ void avl_imprimir_pos_ordem(Arvore_avl *arv);
 
 // Função auxiliar para comparar candidatos
 int comparar_candidatos_avl(Candidato c1, Candidato c2);
-void imprimir_candidato_avl(Candidato c);
+void imprimir_candidato_completo_avl(Candidato c);
+void imprimir_candidato_simples_avl(Candidato c);
 
 #endif // _TAD_AVL_CANDIDATO_H_
