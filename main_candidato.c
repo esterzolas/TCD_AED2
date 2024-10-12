@@ -74,6 +74,8 @@ int main()
     clock_t inicio, fim;
     double tempo;
 
+    printf("TIRAR DEPOIS Foram lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
+
     // Pesquisa Binária
     inicio = clock();
     bsb_criar();
@@ -103,6 +105,213 @@ int main()
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
     printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);
 
+    // Menu de opções
+    /*
+    O usuário escolha opções de busca de informações de candidatos:
+B1) Buscar os dados dos candidatos de um dado estado
+B2) Dado um estado, buscar os dados dos candidatos de uma dada cidade
+B3) Dado um estado e uma cidade, buscar os dados do(a) candidato(a) de um
+dado número
+O resultado da busca deve ser exibido para as três situações programadas, assim como o
+tempo de processamento da consulta. A função de busca deverá ser modificada para
+considerar a ordenação baseada em três campos como descrito anteriormente.
+
+    */
+    int opcao_menu;
+    char estado[3], cidade[100], numero[6];
+    Candidato *candidato;
+
+    do
+    {
+        printf("\nEscolha uma opcao de busca:\n");
+        printf("1 - Dados dos candidatos de um dado estado\n");
+        printf("2 - Dados dos candidatos de uma dada cidade\n");
+        printf("3 - Dados do(a) candidato(a) de um dado numero\n");
+        printf("0 - Sair\n");
+        scanf("%d", &opcao_menu);
+
+        switch (opcao_menu)
+        {
+        case 1:
+            // melhorar para aceitar só o UFs BR
+            printf("Digite o UF: ");
+            scanf("%s", estado);
+
+            // Converte para tudo maiusculo
+
+            // Pesquisa Binária
+            double tempo_bsb = 0;
+            inicio = clock();
+            // ARRUMAR candidato = filtrar_por_estado_bsb(vet, estado);
+            fim = clock();
+            tempo_bsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (candidato != NULL)
+            {
+                imprimirCandidatoCompleto(*candidato);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado no estado %s.\n", estado);
+            }
+
+            // Árvore Binária de Busca
+            double tempo_abb = 0;
+            inicio = clock();
+            Arvore_abb *sub_arv_abb = filtrar_por_estado_abb(arv_abb, estado);
+            fim = clock();
+            tempo_abb = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (!abb_vazia(sub_arv_abb))
+            {
+                abb_imprimir_in_ordem(sub_arv_abb);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado no estado %s.\n", estado);
+            }
+
+            // Árvore AVL
+            double tempo_avl = 0;
+            inicio = clock();
+            Arvore_avl *sub_arv_avl = filtrar_por_estado_avl(arv_avl, estado);
+            fim = clock();
+            tempo_avl = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (!avl_vazia(sub_arv_avl))
+            {
+                avl_imprimir_in_ordem(sub_arv_avl);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado no estado %s.\n", estado);
+            }
+            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo_bsb);
+            printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo_abb);
+            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo_avl);
+            break;
+
+        case 2:
+            // mesma coisa aqui
+            printf("Digite o UF: ");
+            scanf("%s", estado);
+
+            printf("Digite a cidade: ");
+            scanf(" %[^\n]", cidade);
+            // Converte para tudo maiusculo
+
+            // Pesquisa Binária
+            inicio = clock();
+            // ARRUMAR candidato = filtrar_por_cidade_bsb(vet, cidade);
+            fim = clock();
+            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (candidato != NULL)
+            {
+                imprimirCandidatoCompleto(*candidato);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
+            }
+            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo);
+
+            // Árvore Binária de Busca
+            inicio = clock();
+            sub_arv_abb = filtrar_por_cidade_abb(arv_abb, cidade);
+            fim = clock();
+            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (!abb_vazia(sub_arv_abb))
+            {
+                abb_imprimir_in_ordem(sub_arv_abb);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
+            }
+            printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo);
+
+            // Árvore AVL
+            inicio = clock();
+            sub_arv_avl = filtrar_por_cidade_avl(arv_avl, cidade);
+            fim = clock();
+            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (!avl_vazia(sub_arv_avl))
+            {
+                avl_imprimir_in_ordem(sub_arv_avl);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
+            }
+            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
+
+            break;
+
+        case 3:
+            // mesma coisa aqui
+            printf("Digite o UF: ");
+            scanf("%s", estado);
+
+            printf("Digite a cidade: ");
+            scanf(" %[^\n]", cidade);
+            // Converte para tudo maiusculo
+
+
+            printf("Digite o numero: ");
+            scanf("%s", numero);
+
+            // Pesquisa Binária
+            inicio = clock();
+            // ARRUMAR candidato = filtrar_por_chave_bsb(vet, 'N', numero);
+            fim = clock();
+            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (candidato != NULL)
+            {
+                imprimirCandidatoCompleto(*candidato);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
+            }
+            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo);
+
+            // Árvore Binária de Busca
+            inicio = clock();
+            sub_arv_abb = filtrar_por_chave_abb(arv_abb, 'N', numero);
+            fim = clock();
+            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (!abb_vazia(sub_arv_abb))
+            {
+                abb_imprimir_in_ordem(sub_arv_abb);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
+            }
+
+            // Árvore AVL
+            inicio = clock();
+            sub_arv_avl = filtrar_por_chave_avl(arv_avl, 'N', numero);
+            fim = clock();
+            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            if (!avl_vazia(sub_arv_avl))
+            {
+                avl_imprimir_in_ordem(sub_arv_avl);
+            }
+            else
+            {
+                printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
+            }
+            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
+            break;
+
+        case 0:
+            break;
+
+        default:
+            printf("Opcao invalida.\n");
+            break;
+        }
+    } while (opcao_menu != 0);
+
+    // Liberar memória
     free(candidatos);
     abb_liberar(arv_abb);
     avl_liberar(arv_avl);
@@ -130,18 +339,16 @@ int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_can
     }
 
     *num_candidatos = 0;
-    while (fscanf(arquivo, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]\n",
-                   (*candidatos)[*num_candidatos].estado, (*candidatos)[*num_candidatos].cidade,
-                   (*candidatos)[*num_candidatos].numero_urna, (*candidatos)[*num_candidatos].cargo,
-                   (*candidatos)[*num_candidatos].nome, (*candidatos)[*num_candidatos].nome_urna,
-                   (*candidatos)[*num_candidatos].sigla_partido, (*candidatos)[*num_candidatos].genero,
-                   (*candidatos)[*num_candidatos].grau_instrucao, (*candidatos)[*num_candidatos].cor_raca) == 10)
+    char linha[512];
+    while (fgets(linha, sizeof(linha), arquivo))
     {
+        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
+               (*candidatos)[*num_candidatos].estado, (*candidatos)[*num_candidatos].cidade,
+               (*candidatos)[*num_candidatos].numero_urna, (*candidatos)[*num_candidatos].cargo,
+               (*candidatos)[*num_candidatos].nome, (*candidatos)[*num_candidatos].nome_urna,
+               (*candidatos)[*num_candidatos].sigla_partido, (*candidatos)[*num_candidatos].genero,
+               (*candidatos)[*num_candidatos].grau_instrucao, (*candidatos)[*num_candidatos].cor_raca);
         (*num_candidatos)++;
-        if (*num_candidatos == MAX_CANDIDATOS)
-        {
-            break;
-        }
     }
 
     fclose(arquivo);
@@ -162,57 +369,6 @@ int compararCandidatos(const void *a, const void *b)
         return cmpCidade;
 
     return c1->numero_urna - c2->numero_urna;
-}
-
-Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero)
-{
-    if (inicio <= fim)
-    {
-        int meio = inicio + (fim - inicio) / 2;
-
-        // Comparar estado primeiro (usando strcmp para strings)
-        int cmpEstado = strcmp(vetor[meio].estado, estado);
-        if (cmpEstado == 0)
-        {
-            // Comparar cidade (usando strcmp para strings)
-            int cmpCidade = strcmp(vetor[meio].cidade, cidade);
-            if (cmpCidade == 0)
-            {
-                // Comparar numero_urna com numero (usando strcmp, pois ambos são char[])
-                int cmpNumero = strcmp(vetor[meio].numero_urna, numero);
-                if (cmpNumero == 0)
-                {
-                    return &vetor[meio]; // Encontrado
-                }
-                else if (cmpNumero < 0)
-                {
-                    return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita
-                }
-                else
-                {
-                    return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda
-                }
-            }
-            else if (cmpCidade < 0)
-            {
-                return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita (cidade maior)
-            }
-            else
-            {
-                return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda (cidade menor)
-            }
-        }
-        else if (cmpEstado < 0)
-        {
-            return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita (estado maior)
-        }
-        else
-        {
-            return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda (estado menor)
-        }
-    }
-
-    return NULL; // Não encontrado
 }
 
 void cadastrarCandidato(Candidato *candidatos, int *num_candidatos)

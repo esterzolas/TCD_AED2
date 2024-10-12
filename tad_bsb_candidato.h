@@ -3,7 +3,7 @@
 
 #include "tad_abb_candidato.h" // Inclui a definição de Candidato
 
-#define MAX_CANDIDATOS 100
+#define MAX_CANDIDATOS 50000
 
 // Estrutura da Busca Binária em Vetor
 typedef struct

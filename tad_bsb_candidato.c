@@ -262,3 +262,54 @@ int comparar_chave_bsb(Candidato candidato, char chave, char argumento[])
         return 0;
     }
 }
+
+Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero)
+{
+    if (inicio <= fim)
+    {
+        int meio = inicio + (fim - inicio) / 2;
+
+        // Comparar estado primeiro (usando strcmp para strings)
+        int cmpEstado = strcmp(vetor[meio].estado, estado);
+        if (cmpEstado == 0)
+        {
+            // Comparar cidade (usando strcmp para strings)
+            int cmpCidade = strcmp(vetor[meio].cidade, cidade);
+            if (cmpCidade == 0)
+            {
+                // Comparar numero_urna com numero (usando strcmp, pois ambos são char[])
+                int cmpNumero = strcmp(vetor[meio].numero_urna, numero);
+                if (cmpNumero == 0)
+                {
+                    return &vetor[meio]; // Encontrado
+                }
+                else if (cmpNumero < 0)
+                {
+                    return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita
+                }
+                else
+                {
+                    return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda
+                }
+            }
+            else if (cmpCidade < 0)
+            {
+                return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita (cidade maior)
+            }
+            else
+            {
+                return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda (cidade menor)
+            }
+        }
+        else if (cmpEstado < 0)
+        {
+            return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita (estado maior)
+        }
+        else
+        {
+            return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda (estado menor)
+        }
+    }
+
+    return NULL; // Não encontrado
+}
