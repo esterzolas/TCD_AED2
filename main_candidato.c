@@ -1,485 +1,282 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include "tad_abb_candidato.h"
 #include "tad_avl_candidato.h"
 #include "tad_bsb_candidato.h"
 
-// Declarações das funções de filtragem e busca
-
-// Função auxiliar de comparação para filtrar por chave
-int comparar_chave(Candidato candidato, char chave, char argumento[]);
-
-// Árvore Binária de Busca
-Arvore_abb *filtrar_por_estado_abb(Arvore_abb *arv, char estado[]);
-void copiar_subarvore_abb(No_abb *no, Arvore_abb *sub_arv, char estado[]);
-Arvore_abb *filtrar_por_cidade_abb(Arvore_abb *arv, char cidade[]);
-void copiar_subarvore_cidade_abb(No_abb *no, Arvore_abb *sub_arv, char cidade[]);
-Arvore_abb *filtrar_por_chave_abb(Arvore_abb *arv, char chave, char argumento[]);
-void copiar_subarvore_chave_abb(No_abb *no, Arvore_abb *sub_arv, char chave, char argumento[]);
-
-// Árvore AVL
-Arvore_avl *filtrar_por_estado_avl(Arvore_avl *arv, char estado[]);
-void copiar_subarvore_avl(No_avl *no, Arvore_avl *sub_arv, char estado[]);
-Arvore_avl *filtrar_por_cidade_avl(Arvore_avl *arv, char cidade[]);
-void copiar_subarvore_cidade_avl(No_avl *no, Arvore_avl *sub_arv, char cidade[]);
-Arvore_avl *filtrar_por_chave_avl(Arvore_avl *arv, char chave, char argumento[]);
-void copiar_subarvore_chave_avl(No_avl *no, Arvore_avl *sub_arv, char chave, char argumento[]);
-
-// Busca Binária
-Vetor_bsb *filtrar_por_estado_bsb(Vetor_bsb *vet, char estado[]);
-Vetor_bsb *filtrar_por_cidade_bsb(Vetor_bsb *vet, char cidade[]);
-Vetor_bsb *filtrar_por_chave_bsb(Vetor_bsb *vet, char chave, char argumento[]);
+// Funções de leitura e escrita de arquivos
+int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
+int compararCandidatos(const void *a, const void *b);
+Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
+void cadastrarCandidato(Candidato *candidatos, int *num_candidatos);
+void atualizarArquivoCandidatos(Candidato *candidatos, int num_candidatos);
+void imprimirCandidatoCompleto(Candidato c);
 
 // Implementações
+/*
+Faça um programa que leia um arquivo texto com as informações dos candidatos e as
+organize, considerando a ordenação baseada nos seguintes campos: estado, cidade e
+número do candidato.
+O processamento das informações dos candidatos deverá realizar-se de três formas
+distintas:
+1. Pesquisa Binária (usando vetor).
+2. Árvore Binária de Busca sem balanceamento.
+3. Árvore AVL.
+O programa deve permitir que:
+A. O usuário escolha um arquivo de texto para ser carregado nas estruturas de dados(opção de escolher entre 2 arquivos, 
+eleicoe2024 ou subConjuntoEleicoes2024),
+considerando cada um dos 3 casos citados. Após a carga dos dados nas estruturas, deve
+ser exibido o tempo para cada uma. A função de inserção deverá ser modificada para
+considerar a ordenação baseada em três campos como descrito acima.
+*/
+
 int main()
 {
-    // Criação das estruturas
-    Arvore_abb *abb = abb_criar();
-    Arvore_avl *avl = avl_criar();
-    Vetor_bsb *vetor_bsb = bsb_criar();
+    Candidato *candidatos;
+    int num_candidatos;
 
-    // Criação de candidatos
-    Candidato c1 = {"SP", "Sao Paulo", "12", "prefeito", "Joao Silva", "Joao", "PSDB", "Masculino", "Superior", "Indigena"};
-    Candidato c2 = {"SP", "Sao Paulo", "40", "prefeito", "Maria Souza", "Maria", "PSD", "Feminino", "Ensino Medio", "Pardo"};
-    Candidato c3 = {"SP", "Sao Paulo", "70111", "vereador", "Pedro Santos", "Pedro", "PSD", "Masculino", "Fundamental", "Branco"};
-    Candidato c4 = {"MG", "Belo Horizonte", "13", "prefeito", "Duda Salabert", "Duda", "PT", "Feminino", "Superior", "Branca"};
+    // Ler arquivo de candidatos
+    char nomeArquivo[100];
+    printf("Escolha um opcao de arquivo para carregar os dados:\n");
+    printf("1 - eleicoes2024\n");
+    printf("2 - subConjuntoEleicoes2024\n");
 
-    // Inserção dos candidatos nas estruturas
-    abb_inserir(abb, c1);
-    abb_inserir(abb, c2);
-    abb_inserir(abb, c3);
-    abb_inserir(abb, c4);
-
-    avl_inserir(avl, c1);
-    avl_inserir(avl, c2);
-    avl_inserir(avl, c3);
-    avl_inserir(avl, c4);
-
-    bsb_inserir(vetor_bsb, c1);
-    bsb_inserir(vetor_bsb, c2);
-    bsb_inserir(vetor_bsb, c3);
-    bsb_inserir(vetor_bsb, c4);
-
-    // Impressão das estruturas
-    printf("ABB:\n");
-    abb_imprimir_in_ordem(abb);
-    printf("\n");
-
-    printf("AVL:\n");
-    avl_imprimir_in_ordem(avl);
-    printf("\n");
-
-    printf("Vetor com Busca Binaria:\n");
-    bsb_imprimir(vetor_bsb);
-    printf("\n");
-
-    // Busca de um candidato
-    No_abb *no_abb = abb_buscar(abb, c4);
-    No_avl *no_avl = avl_buscar(avl, c4);
-    int indice_bsb = bsb_buscar(vetor_bsb, c4);
-
-    if (no_abb != NULL)
+    int opcao;
+    scanf("%d", &opcao);
+    if (opcao == 1)
     {
-        printf("Candidato encontrado na ABB!\n");
+        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\eleicoes2024.txt");
+    }
+    else if (opcao == 2)
+    {
+        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+    }
+    else
+    {
+        printf("Opcao invalida.\n");
+        return 1;
     }
 
-    if (no_avl != NULL)
+    if (!lerArquivoCandidatos(nomeArquivo, &candidatos, &num_candidatos))
     {
-        printf("Candidato encontrado na AVL!\n");
+        return 1;
     }
 
-    if (indice_bsb != -1)
+    clock_t inicio, fim;
+    double tempo;
+
+    // Pesquisa Binária
+    inicio = clock();
+    // ?
+    fim = clock();
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo de ordenação por Pesquisa Binária: %.6f segundos\n", tempo);
+
+    // Árvore Binária de Busca
+    Arvore_abb *arv_abb = abb_criar();
+    inicio = clock();
+    for (int i = 0; i < num_candidatos; i++)
     {
-        printf("Candidato encontrado no Vetor com Busca Binaria!\n");
+        abb_inserir(arv_abb, candidatos[i]);
     }
+    fim = clock();
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo de ordenação por Árvore Binária de Busca: %.6f segundos\n", tempo);
 
-    Arvore_abb *sub_abb = filtrar_por_estado_abb(abb, "SP");
-    printf("\nCandidatos do estado %s (ABB):\n", "SP");
-    abb_imprimir_in_ordem(sub_abb);
+    // Árvore AVL
+    Arvore_avl *arv_avl = avl_criar();
+    inicio = clock();
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        avl_inserir(arv_avl, candidatos[i]);
+    }
+    fim = clock();
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo de ordenação por Árvore AVL: %.6f segundos\n", tempo);
 
-    sub_abb = filtrar_por_cidade_abb(sub_abb, "Sao Paulo");
-    printf("\nCandidatos da cidade %s (ABB):\n", "Sao Paulo");
-    abb_imprimir_in_ordem(sub_abb);
-
-    sub_abb = filtrar_por_chave_abb(sub_abb, 'P', "PSD");
-    printf("\nCandidatos do partido %s (ABB):\n", "PSD");
-    abb_imprimir_in_ordem(sub_abb);
-
-    sub_abb = filtrar_por_chave_abb(sub_abb, 'G', "Feminino");
-    printf("\nCandidatos do genero %s (ABB):\n", "Feminino");
-    abb_imprimir_in_ordem(sub_abb);
-
-    Vetor_bsb *sub_bsb = filtrar_por_estado_bsb(vetor_bsb, "SP");
-    printf("\nCandidatos do estado %s (Vetor com Busca Binaria):\n", "SP");
-    bsb_imprimir(sub_bsb);
-    bsb_liberar(sub_bsb);
-
-    // Remoção de um candidato
-    abb_remover(abb, c2);
-    avl_remover(avl, c2);
-    bsb_remover(vetor_bsb, c2);
-
-    // Impressão das estruturas após a remoção
-    printf("\nApos a remocao de Maria Souza:\n");
-    printf("ABB:\n");
-    abb_imprimir_in_ordem(abb);
-    printf("\n");
-
-    printf("AVL:\n");
-    avl_imprimir_in_ordem(avl);
-    printf("\n");
-
-    printf("Vetor com Busca Binaria:\n");
-    bsb_imprimir(vetor_bsb);
-    printf("\n");
-
-    // Liberação de memória
-    abb_liberar(abb);
-    avl_liberar(avl);
-    bsb_liberar(vetor_bsb);
+    free(candidatos);
+    abb_liberar(arv_abb);
+    avl_liberar(arv_avl);
 
     return 0;
 }
 
-// Funções auxiliares de comparação para filtrar por chave
-int comparar_chave(Candidato candidato, char chave, char argumento[])
+// Funções de leitura e escrita de arquivos
+// ESTADO;CIDADE;NR_CANDIDATO;CARGO;NM_CANDIDATO;NM_URNA_CANDIDATO;SG_PARTIDO;GENERO;GRAU_INSTRUCAO;COR_RACA
+int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos)
 {
-    switch (chave)
+    FILE *arquivo = fopen(nomeArquivo, "r");
+    if (arquivo == NULL)
     {
-    case 'G':
-        return (strcmp(candidato.genero, argumento) == 0);
-    case 'P':
-        return (strcmp(candidato.sigla_partido, argumento) == 0);
-    case 'R':
-        return (strcmp(candidato.cor_raca, argumento) == 0);
-    case 'N':
-        return (strcmp(candidato.numero_urna, argumento) == 0);
-    default:
+        printf("Erro ao abrir o arquivo %s!\n", nomeArquivo);
         return 0;
     }
-}
 
-// Funções ABB
-Arvore_abb *filtrar_por_estado_abb(Arvore_abb *arv, char estado[])
-{
-    Arvore_abb *sub_arv = abb_criar();
-    if (arv == NULL || abb_vazia(arv))
+    *candidatos = (Candidato *)malloc(MAX_CANDIDATOS * sizeof(Candidato));
+    if (*candidatos == NULL)
     {
-        return sub_arv;
+        printf("Erro ao alocar memória para os candidatos!\n");
+        fclose(arquivo);
+        return 0;
     }
 
-    No_abb *atual = arv->raiz;
-    if (strcmp(atual->candidato.estado, estado) == 0)
+    *num_candidatos = 0;
+    while (fscanf(arquivo, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]\n",
+                   (*candidatos)[*num_candidatos].estado, (*candidatos)[*num_candidatos].cidade,
+                   (*candidatos)[*num_candidatos].numero_urna, (*candidatos)[*num_candidatos].cargo,
+                   (*candidatos)[*num_candidatos].nome, (*candidatos)[*num_candidatos].nome_urna,
+                   (*candidatos)[*num_candidatos].sigla_partido, (*candidatos)[*num_candidatos].genero,
+                   (*candidatos)[*num_candidatos].grau_instrucao, (*candidatos)[*num_candidatos].cor_raca) == 10)
     {
-        abb_inserir(sub_arv, atual->candidato);
-    }
-    if (atual->esq != NULL)
-    {
-        copiar_subarvore_abb(atual->esq, sub_arv, estado);
-    }
-    if (atual->dir != NULL)
-    {
-        copiar_subarvore_abb(atual->dir, sub_arv, estado);
-    }
-
-    if (abb_vazia(sub_arv))
-    {
-        printf("Nenhum candidato encontrado no estado.\n");
-    }
-
-    return sub_arv;
-}
-
-void copiar_subarvore_abb(No_abb *no, Arvore_abb *sub_arv, char estado[])
-{
-    if (no == NULL)
-    {
-        return;
-    }
-    if (strcmp(no->candidato.estado, estado) == 0)
-    {
-        abb_inserir(sub_arv, no->candidato);
-    }
-    copiar_subarvore_abb(no->esq, sub_arv, estado);
-    copiar_subarvore_abb(no->dir, sub_arv, estado);
-}
-
-Arvore_abb *filtrar_por_cidade_abb(Arvore_abb *arv, char cidade[])
-{
-    Arvore_abb *sub_arv = abb_criar();
-
-    if (arv == NULL || abb_vazia(arv))
-    {
-        return sub_arv;
-    }
-
-    No_abb *atual = arv->raiz;
-    if (strcmp(atual->candidato.cidade, cidade) == 0)
-    {
-        abb_inserir(sub_arv, atual->candidato);
-    }
-    if (atual->esq != NULL)
-    {
-        copiar_subarvore_cidade_abb(atual->esq, sub_arv, cidade);
-    }
-    if (atual->dir != NULL)
-    {
-        copiar_subarvore_cidade_abb(atual->dir, sub_arv, cidade);
-    }
-
-    if (abb_vazia(sub_arv))
-    {
-        printf("Nenhum candidato encontrado na cidade.\n");
-    }
-
-    return sub_arv;
-}
-
-void copiar_subarvore_cidade_abb(No_abb *no, Arvore_abb *sub_arv, char cidade[])
-{
-    if (no == NULL)
-    {
-        return;
-    }
-    if (strcmp(no->candidato.cidade, cidade) == 0)
-    {
-        abb_inserir(sub_arv, no->candidato);
-    }
-    copiar_subarvore_cidade_abb(no->esq, sub_arv, cidade);
-    copiar_subarvore_cidade_abb(no->dir, sub_arv, cidade);
-}
-
-Arvore_abb *filtrar_por_chave_abb(Arvore_abb *arv, char chave, char argumento[])
-{
-    Arvore_abb *sub_arv = abb_criar();
-
-    if (arv == NULL || abb_vazia(arv))
-    {
-        return sub_arv;
-    }
-
-    No_abb *atual = arv->raiz;
-    if (comparar_chave(atual->candidato, chave, argumento))
-    {
-        abb_inserir(sub_arv, atual->candidato);
-    }
-    if (atual->esq != NULL)
-    {
-        copiar_subarvore_chave_abb(atual->esq, sub_arv, chave, argumento);
-    }
-    if (atual->dir != NULL)
-    {
-        copiar_subarvore_chave_abb(atual->dir, sub_arv, chave, argumento);
-    }
-
-    if (abb_vazia(sub_arv))
-    {
-        printf("Nenhum candidato encontrado no estado.\n");
-    }
-
-    return sub_arv;
-}
-
-void copiar_subarvore_chave_abb(No_abb *no, Arvore_abb *sub_arv, char chave, char argumento[])
-{
-    if (no == NULL)
-    {
-        return;
-    }
-    if (comparar_chave(no->candidato, chave, argumento))
-    {
-        abb_inserir(sub_arv, no->candidato);
-    }
-    copiar_subarvore_chave_abb(no->esq, sub_arv, chave, argumento);
-    copiar_subarvore_chave_abb(no->dir, sub_arv, chave, argumento);
-}
-
-// Funções AVL
-Arvore_avl *filtrar_por_estado_avl(Arvore_avl *arv, char estado[])
-{
-    Arvore_avl *sub_arv = avl_criar();
-    if (arv == NULL || avl_vazia(arv))
-    {
-        return sub_arv;
-    }
-    No_avl *atual = arv->raiz;
-    if (strcmp(atual->candidato.estado, estado) == 0)
-    {
-        avl_inserir(sub_arv, atual->candidato);
-    }
-    if (atual->esq != NULL)
-    {
-        copiar_subarvore_avl(atual->esq, sub_arv, estado);
-    }
-    if (atual->dir != NULL)
-    {
-        copiar_subarvore_avl(atual->dir, sub_arv, estado);
-    }
-
-    if (avl_vazia(sub_arv))
-    {
-        printf("Nenhum candidato encontrado no estado.\n");
-    }
-
-    return sub_arv;
-}
-
-void copiar_subarvore_avl(No_avl *no, Arvore_avl *sub_arv, char estado[])
-{
-    if (no == NULL)
-    {
-        return;
-    }
-    if (strcmp(no->candidato.estado, estado) == 0)
-    {
-        avl_inserir(sub_arv, no->candidato);
-    }
-    copiar_subarvore_avl(no->esq, sub_arv, estado);
-    copiar_subarvore_avl(no->dir, sub_arv, estado);
-}
-
-Arvore_avl *filtrar_por_cidade_avl(Arvore_avl *arv, char cidade[])
-{
-    Arvore_avl *sub_arv = avl_criar();
-
-    if (arv == NULL || avl_vazia(arv))
-    {
-        return sub_arv;
-    }
-
-    No_avl *atual = arv->raiz;
-    if (strcmp(atual->candidato.cidade, cidade) == 0)
-    {
-        avl_inserir(sub_arv, atual->candidato);
-    }
-    if (atual->esq != NULL)
-    {
-        copiar_subarvore_cidade_avl(atual->esq, sub_arv, cidade);
-    }
-    if (atual->dir != NULL)
-    {
-        copiar_subarvore_cidade_avl(atual->dir, sub_arv, cidade);
-    }
-
-    if (avl_vazia(sub_arv))
-    {
-        printf("Nenhum candidato encontrado no estado.\n");
-    }
-
-    return sub_arv;
-}
-
-void copiar_subarvore_cidade_avl(No_avl *no, Arvore_avl *sub_arv, char cidade[])
-{
-    if (no == NULL)
-    {
-        return;
-    }
-    if (strcmp(no->candidato.cidade, cidade) == 0)
-    {
-        avl_inserir(sub_arv, no->candidato);
-    }
-    copiar_subarvore_cidade_avl(no->esq, sub_arv, cidade);
-    copiar_subarvore_cidade_avl(no->dir, sub_arv, cidade);
-}
-
-Arvore_avl *filtrar_por_chave_avl(Arvore_avl *arv, char chave, char argumento[])
-{
-    Arvore_avl *sub_arv = avl_criar();
-
-    if (arv == NULL || avl_vazia(arv))
-    {
-        return sub_arv;
-    }
-
-    No_avl *atual = arv->raiz;
-    if (comparar_chave(atual->candidato, chave, argumento))
-    {
-        avl_inserir(sub_arv, atual->candidato);
-    }
-    if (atual->esq != NULL)
-    {
-        copiar_subarvore_chave_avl(atual->esq, sub_arv, chave, argumento);
-    }
-    if (atual->dir != NULL)
-    {
-        copiar_subarvore_chave_avl(atual->dir, sub_arv, chave, argumento);
-    }
-
-    if (avl_vazia(sub_arv))
-    {
-        printf("Nenhum candidato encontrado no estado.\n");
-    }
-
-    return sub_arv;
-}
-
-void copiar_subarvore_chave_avl(No_avl *no, Arvore_avl *sub_arv, char chave, char argumento[])
-{
-    if (no == NULL)
-    {
-        return;
-    }
-    if (comparar_chave(no->candidato, chave, argumento))
-    {
-        avl_inserir(sub_arv, no->candidato);
-    }
-    copiar_subarvore_chave_avl(no->esq, sub_arv, chave, argumento);
-    copiar_subarvore_chave_avl(no->dir, sub_arv, chave, argumento);
-}
-
-// Funções Busca Binária
-Vetor_bsb *filtrar_por_estado_bsb(Vetor_bsb *vet, char estado[])
-{
-    Vetor_bsb *sub_vet = bsb_criar();
-    if (vet == NULL || bsb_vazia(vet))
-    {
-        return sub_vet; // Retorna um vetor vazio se o original for nulo ou vazio
-    }
-
-    for (int i = 0; i < vet->tamanho; i++)
-    {
-        if (strcmp(vet->candidatos[i].estado, estado) == 0)
+        (*num_candidatos)++;
+        if (*num_candidatos == MAX_CANDIDATOS)
         {
-            bsb_inserir(sub_vet, vet->candidatos[i]);
+            break;
         }
     }
-    return sub_vet;
+
+    fclose(arquivo);
+    return 1;
 }
 
-Vetor_bsb *filtrar_por_cidade_bsb(Vetor_bsb *vet, char cidade[])
+int compararCandidatos(const void *a, const void *b)
 {
-    Vetor_bsb *sub_vet = bsb_criar();
-    if (vet == NULL || bsb_vazia(vet))
-    {
-        return sub_vet;
-    }
+    Candidato *c1 = (Candidato *)a;
+    Candidato *c2 = (Candidato *)b;
 
-    for (int i = 0; i < vet->tamanho; i++)
-    {
-        if (strcmp(vet->candidatos[i].cidade, cidade) == 0)
-        {
-            bsb_inserir(sub_vet, vet->candidatos[i]);
-        }
-    }
-    return sub_vet;
+    int cmpEstado = strcmp(c1->estado, c2->estado);
+    if (cmpEstado != 0)
+        return cmpEstado;
+
+    int cmpCidade = strcmp(c1->cidade, c2->cidade);
+    if (cmpCidade != 0)
+        return cmpCidade;
+
+    return c1->numero_urna - c2->numero_urna;
 }
 
-Vetor_bsb *filtrar_por_chave_bsb(Vetor_bsb *vet, char chave, char argumento[])
+Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero)
 {
-    Vetor_bsb *sub_vet = bsb_criar();
-    if (vet == NULL || bsb_vazia(vet))
+    if (inicio <= fim)
     {
-        return sub_vet;
-    }
+        int meio = inicio + (fim - inicio) / 2;
 
-    for (int i = 0; i < vet->tamanho; i++)
-    {
-        if (comparar_chave(vet->candidatos[i], chave, argumento))
+        // Comparar estado primeiro (usando strcmp para strings)
+        int cmpEstado = strcmp(vetor[meio].estado, estado);
+        if (cmpEstado == 0)
         {
-            bsb_inserir(sub_vet, vet->candidatos[i]);
+            // Comparar cidade (usando strcmp para strings)
+            int cmpCidade = strcmp(vetor[meio].cidade, cidade);
+            if (cmpCidade == 0)
+            {
+                // Comparar numero_urna com numero (usando strcmp, pois ambos são char[])
+                int cmpNumero = strcmp(vetor[meio].numero_urna, numero);
+                if (cmpNumero == 0)
+                {
+                    return &vetor[meio]; // Encontrado
+                }
+                else if (cmpNumero < 0)
+                {
+                    return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita
+                }
+                else
+                {
+                    return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda
+                }
+            }
+            else if (cmpCidade < 0)
+            {
+                return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita (cidade maior)
+            }
+            else
+            {
+                return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda (cidade menor)
+            }
+        }
+        else if (cmpEstado < 0)
+        {
+            return buscaBinariaCandidato(vetor, meio + 1, fim, estado, cidade, numero); // Buscar na metade direita (estado maior)
+        }
+        else
+        {
+            return buscaBinariaCandidato(vetor, inicio, meio - 1, estado, cidade, numero); // Buscar na metade esquerda (estado menor)
         }
     }
-    return sub_vet;
+
+    return NULL; // Não encontrado
+}
+
+void cadastrarCandidato(Candidato *candidatos, int *num_candidatos)
+{
+    printf("Digite o estado: ");
+    scanf("%2s", candidatos[*num_candidatos].estado);
+
+    printf("Digite a cidade: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].cidade);
+
+    printf("Digite o numero: ");
+    scanf("%d", &candidatos[*num_candidatos].numero_urna);
+
+    printf("Digite o cargo: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].cargo);
+
+    printf("Digite o nome completo: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].nome);
+
+    printf("Digite o nome de urna: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].nome_urna);
+
+    printf("Digite o partido: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].sigla_partido);
+
+    printf("Digite o genero: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].genero);
+
+    printf("Digite o grau de instrucao: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].grau_instrucao);
+
+    printf("Digite a cor/raca: ");
+    scanf(" %[^\n]", candidatos[*num_candidatos].cor_raca);
+
+    (*num_candidatos)++;
+    printf("Candidato cadastrado com sucesso!\n");
+}
+
+void atualizarArquivoCandidatos(Candidato *candidatos, int num_candidatos)
+{
+    FILE *arquivo = fopen(nomeArquivo, "w");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo para atualizacao!\n");
+        return;
+    }
+
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        fprintf(arquivo, "%s  %s  %d  %s  %s  %s  %s  %s  %s  %s\n",
+                candidatos[i].estado, candidatos[i].cidade, candidatos[i].numero_urna,
+                candidatos[i].cargo, candidatos[i].nome, candidatos[i].nome_urna,
+                candidatos[i].sigla_partido, candidatos[i].genero, candidatos[i].grau_instrucao,
+                candidatos[i].cor_raca);
+    }
+
+    fclose(arquivo);
+    printf("Arquivo atualizado com sucesso!\n");
+}
+
+void imprimirCandidatoCompleto(Candidato c)
+{
+    printf("Nome: %s\n", c.nome);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %d\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("Genero: %s\n", c.genero);
+    printf("Grau de instrucao: %s\n", c.grau_instrucao);
+    printf("Cor/Raca: %s\n", c.cor_raca);
+    printf("--------------------\n");
 }

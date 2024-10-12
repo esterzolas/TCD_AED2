@@ -385,3 +385,153 @@ void avl_imprimir_pos_ordem(Arvore_avl *arv)
         avl_imprimir_pos_ordem_no(arv->raiz);
     }
 }
+
+Arvore_avl *filtrar_por_estado_avl(Arvore_avl *arv, char estado[])
+{
+    Arvore_avl *sub_arv = avl_criar();
+    if (arv == NULL || avl_vazia(arv))
+    {
+        return sub_arv;
+    }
+    No_avl *atual = arv->raiz;
+    if (strcmp(atual->candidato.estado, estado) == 0)
+    {
+        avl_inserir(sub_arv, atual->candidato);
+    }
+    if (atual->esq != NULL)
+    {
+        copiar_subarvore_avl(atual->esq, sub_arv, estado);
+    }
+    if (atual->dir != NULL)
+    {
+        copiar_subarvore_avl(atual->dir, sub_arv, estado);
+    }
+
+    if (avl_vazia(sub_arv))
+    {
+        printf("Nenhum candidato encontrado no estado.\n");
+    }
+
+    return sub_arv;
+}
+
+void copiar_subarvore_avl(No_avl *no, Arvore_avl *sub_arv, char estado[])
+{
+    if (no == NULL)
+    {
+        return;
+    }
+    if (strcmp(no->candidato.estado, estado) == 0)
+    {
+        avl_inserir(sub_arv, no->candidato);
+    }
+    copiar_subarvore_avl(no->esq, sub_arv, estado);
+    copiar_subarvore_avl(no->dir, sub_arv, estado);
+}
+
+Arvore_avl *filtrar_por_cidade_avl(Arvore_avl *arv, char cidade[])
+{
+    Arvore_avl *sub_arv = avl_criar();
+
+    if (arv == NULL || avl_vazia(arv))
+    {
+        return sub_arv;
+    }
+
+    No_avl *atual = arv->raiz;
+    if (strcmp(atual->candidato.cidade, cidade) == 0)
+    {
+        avl_inserir(sub_arv, atual->candidato);
+    }
+    if (atual->esq != NULL)
+    {
+        copiar_subarvore_cidade_avl(atual->esq, sub_arv, cidade);
+    }
+    if (atual->dir != NULL)
+    {
+        copiar_subarvore_cidade_avl(atual->dir, sub_arv, cidade);
+    }
+
+    if (avl_vazia(sub_arv))
+    {
+        printf("Nenhum candidato encontrado na cidade.\n");
+    }
+
+    return sub_arv;
+}
+
+void copiar_subarvore_cidade_avl(No_avl *no, Arvore_avl *sub_arv, char cidade[])
+{
+    if (no == NULL)
+    {
+        return;
+    }
+    if (strcmp(no->candidato.cidade, cidade) == 0)
+    {
+        avl_inserir(sub_arv, no->candidato);
+    }
+    copiar_subarvore_cidade_avl(no->esq, sub_arv, cidade);
+    copiar_subarvore_cidade_avl(no->dir, sub_arv, cidade);
+}
+
+Arvore_avl *filtrar_por_chave_avl(Arvore_avl *arv, char chave, char argumento[])
+{
+    Arvore_avl *sub_arv = avl_criar();
+
+    if (arv == NULL || avl_vazia(arv))
+    {
+        return sub_arv;
+    }
+
+    No_avl *atual = arv->raiz;
+    if (comparar_chave_avl(atual->candidato, chave, argumento))
+    {
+        avl_inserir(sub_arv, atual->candidato);
+    }
+    if (atual->esq != NULL)
+    {
+        copiar_subarvore_chave_avl(atual->esq, sub_arv, chave, argumento);
+    }
+    if (atual->dir != NULL)
+    {
+        copiar_subarvore_chave_avl(atual->dir, sub_arv, chave, argumento);
+    }
+
+    if (avl_vazia(sub_arv))
+    {
+        printf("Nenhum candidato encontrado no estado.\n");
+    }
+
+    return sub_arv;
+}
+
+void copiar_subarvore_chave_avl(No_avl *no, Arvore_avl *sub_arv, char chave, char argumento[])
+{
+    if (no == NULL)
+    {
+        return;
+    }
+    if (comparar_chave_avl(no->candidato, chave, argumento))
+    {
+        avl_inserir(sub_arv, no->candidato);
+    }
+    copiar_subarvore_chave_avl(no->esq, sub_arv, chave, argumento);
+    copiar_subarvore_chave_avl(no->dir, sub_arv, chave, argumento);
+}
+
+int comparar_chave_avl(Candidato candidato, char chave, char argumento[])
+{
+    switch (chave)
+    {
+    case 'G':
+        return (strcmp(candidato.genero, argumento) == 0);
+    case 'P':
+        return (strcmp(candidato.sigla_partido, argumento) == 0);
+    case 'R':
+        return (strcmp(candidato.cor_raca, argumento) == 0);
+    case 'N':
+        return (strcmp(candidato.numero_urna, argumento) == 0);
+    default:
+        return 0;
+    }
+}

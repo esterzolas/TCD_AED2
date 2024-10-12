@@ -185,3 +185,74 @@ void bsb_imprimir(Vetor_bsb *vet)
         imprimir_candidato_simples_bsb(vet->candidatos[i]);
     }
 }
+
+Vetor_bsb *filtrar_por_estado_bsb(Vetor_bsb *vet, char estado[])
+{
+    Vetor_bsb *sub_vet = bsb_criar();
+    if (vet == NULL || bsb_vazia(vet))
+    {
+        return sub_vet; // Retorna um vetor vazio se o original for nulo ou vazio
+    }
+
+    for (int i = 0; i < vet->tamanho; i++)
+    {
+        if (strcmp(vet->candidatos[i].estado, estado) == 0)
+        {
+            bsb_inserir(sub_vet, vet->candidatos[i]);
+        }
+    }
+    return sub_vet;
+}
+
+Vetor_bsb *filtrar_por_cidade_bsb(Vetor_bsb *vet, char cidade[])
+{
+    Vetor_bsb *sub_vet = bsb_criar();
+    if (vet == NULL || bsb_vazia(vet))
+    {
+        return sub_vet;
+    }
+
+    for (int i = 0; i < vet->tamanho; i++)
+    {
+        if (strcmp(vet->candidatos[i].cidade, cidade) == 0)
+        {
+            bsb_inserir(sub_vet, vet->candidatos[i]);
+        }
+    }
+    return sub_vet;
+}
+
+Vetor_bsb *filtrar_por_chave_bsb(Vetor_bsb *vet, char chave, char argumento[])
+{
+    Vetor_bsb *sub_vet = bsb_criar();
+    if (vet == NULL || bsb_vazia(vet))
+    {
+        return sub_vet;
+    }
+
+    for (int i = 0; i < vet->tamanho; i++)
+    {
+        if (comparar_chave_bsb(vet->candidatos[i], chave, argumento))
+        {
+            bsb_inserir(sub_vet, vet->candidatos[i]);
+        }
+    }
+    return sub_vet;
+}
+
+int comparar_chave_bsb(Candidato candidato, char chave, char argumento[])
+{
+    switch (chave)
+    {
+    case 'G':
+        return (strcmp(candidato.genero, argumento) == 0);
+    case 'P':
+        return (strcmp(candidato.sigla_partido, argumento) == 0);
+    case 'R':
+        return (strcmp(candidato.cor_raca, argumento) == 0);
+    case 'N':
+        return (strcmp(candidato.numero_urna, argumento) == 0);
+    default:
+        return 0;
+    }
+}

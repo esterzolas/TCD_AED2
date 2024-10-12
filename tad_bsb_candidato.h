@@ -23,4 +23,9 @@ int bsb_tamanho(Vetor_bsb *vet);
 int bsb_vazia(Vetor_bsb *vet);
 void bsb_imprimir(Vetor_bsb *vet);
 
+Vetor_bsb *filtrar_por_estado_bsb(Vetor_bsb *vet, char estado[]);
+Vetor_bsb *filtrar_por_cidade_bsb(Vetor_bsb *vet, char cidade[]);
+Vetor_bsb *filtrar_por_chave_bsb(Vetor_bsb *vet, char chave, char argumento[]);
+int comparar_chave_bsb(Candidato candidato, char chave, char argumento[]);
+
 #endif // _TAD_BSB_CANDIDATO_H_

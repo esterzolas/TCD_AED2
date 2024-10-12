@@ -2,9 +2,9 @@
 #define _TAD_ABB_CANDIDATO_H_
 
 #define MAX_TAM_ESTADO 3
-#define MAX_TAM_CIDADE 50
-#define MAX_TAM_NOME 50
-#define MAX_TAM_NOME_URNA 20
+#define MAX_TAM_CIDADE 100
+#define MAX_TAM_NOME 100
+#define MAX_TAM_NOME_URNA 100
 #define MAX_TAM_SIGLA_PARTIDO 10
 #define MAX_TAM_COR_RACA 10
 #define MAX_TAM_GRAU_INSTRUCAO 40
@@ -52,5 +52,13 @@ int abb_vazia(Arvore_abb *arv);
 void abb_imprimir_in_ordem(Arvore_abb *arv);
 void abb_imprimir_pre_ordem(Arvore_abb *arv);
 void abb_imprimir_pos_ordem(Arvore_abb *arv);
+
+Arvore_abb *filtrar_por_estado_abb(Arvore_abb *arv, char estado[]);
+void copiar_subarvore_abb(No_abb *no, Arvore_abb *sub_arv, char estado[]);
+Arvore_abb *filtrar_por_cidade_abb(Arvore_abb *arv, char cidade[]);
+void copiar_subarvore_cidade_abb(No_abb *no, Arvore_abb *sub_arv, char cidade[]);
+Arvore_abb *filtrar_por_chave_abb(Arvore_abb *arv, char chave, char argumento[]);
+void copiar_subarvore_chave_abb(No_abb *no, Arvore_abb *sub_arv, char chave, char argumento[]);
+int comparar_chave_abb(Candidato candidato, char chave, char argumento[]);
 
 #endif // _TAD_ABB_CANDIDATO_H_
