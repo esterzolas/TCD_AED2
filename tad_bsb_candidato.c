@@ -6,7 +6,7 @@
 // Funções auxiliares
 void imprimir_candidato_completo_bsb(Candidato c)
 {
-    printf("Nome: %s\n", c.nome);
+    printf("\nNome: %s\n", c.nome);
     printf("Nome na urna: %s\n", c.nome_urna);
     printf("Numero: %s\n", c.numero_urna);
     printf("Estado: %s\n", c.estado);
@@ -21,7 +21,13 @@ void imprimir_candidato_completo_bsb(Candidato c)
 
 void imprimir_candidato_simples_bsb(Candidato c)
 {
-    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
+    printf("\nNome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("--------------------\n");
 }
 
 int comparar_candidatos_bsb(Candidato c1, Candidato c2)

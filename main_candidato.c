@@ -11,7 +11,7 @@ int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_can
 int compararCandidatos(const void *a, const void *b);
 Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
 void cadastrarCandidato(Candidato *candidatos, int *num_candidatos);
-void atualizarArquivoCandidatos(Candidato *candidatos, int num_candidatos);
+void atualizarArquivoCandidatos(char *nomeArquivo, Candidato *candidatos, int num_candidatos);
 void imprimirCandidatoCompleto(Candidato c);
 
 // Implementações
@@ -63,16 +63,23 @@ int main()
     {
         return 1;
     }
-
+    
+    // criar bsb e imprimir
+    Vetor_bsb *vet = bsb_criar();
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        bsb_inserir(vet, candidatos[i]);
+    }
+    bsb_imprimir(vet);
     clock_t inicio, fim;
     double tempo;
 
     // Pesquisa Binária
     inicio = clock();
-    // ?
+    bsb_criar();
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenação por Pesquisa Binária: %.6f segundos\n", tempo);
+    printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
 
     // Árvore Binária de Busca
     Arvore_abb *arv_abb = abb_criar();
@@ -83,7 +90,7 @@ int main()
     }
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenação por Árvore Binária de Busca: %.6f segundos\n", tempo);
+    printf("Tempo de ordenacao por Arvore Binaria de Busca: %.6f segundos\n", tempo);
 
     // Árvore AVL
     Arvore_avl *arv_avl = avl_criar();
@@ -94,7 +101,7 @@ int main()
     }
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenação por Árvore AVL: %.6f segundos\n", tempo);
+    printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);
 
     free(candidatos);
     abb_liberar(arv_abb);
@@ -244,7 +251,7 @@ void cadastrarCandidato(Candidato *candidatos, int *num_candidatos)
     printf("Candidato cadastrado com sucesso!\n");
 }
 
-void atualizarArquivoCandidatos(Candidato *candidatos, int num_candidatos)
+void atualizarArquivoCandidatos(char *nomeArquivo, Candidato *candidatos, int num_candidatos)
 {
     FILE *arquivo = fopen(nomeArquivo, "w");
     if (arquivo == NULL)
