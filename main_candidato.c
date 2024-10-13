@@ -42,6 +42,7 @@ int main()
     printf("Escolha um opcao de arquivo para carregar os dados:\n");
     printf("1 - eleicoes2024\n");
     printf("2 - subConjuntoEleicoes2024\n");
+    //colocar 3 sub conuntos no total? um de 50, outro de 500 e outro de 5000
 
     int opcao;
     scanf("%d", &opcao);
@@ -64,23 +65,21 @@ int main()
         return 1;
     }
     
-    // criar bsb e imprimir
-    Vetor_bsb *vet = bsb_criar();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        bsb_inserir(vet, candidatos[i]);
-    }
-    bsb_imprimir(vet);
     clock_t inicio, fim;
     double tempo;
 
-    printf("TIRAR DEPOIS Foram lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
-
     // Pesquisa Binária
     inicio = clock();
-    bsb_criar();
+    Vetor_bsb *vet_abb = bsb_criar();
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        bsb_inserir(vet_abb, candidatos[i]);
+    }
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    bsb_imprimir(vet_abb);
+    printf("TIRAR DEPOIS Foram lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
     printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
 
     // Árvore Binária de Busca
@@ -118,7 +117,7 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
 
     */
     int opcao_menu;
-    char estado[3], cidade[100], numero[6];
+    char estado[2], cidade[100], numero[6];
     Candidato *candidato;
 
     do
@@ -142,12 +141,12 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
             // Pesquisa Binária
             double tempo_bsb = 0;
             inicio = clock();
-            // ARRUMAR candidato = filtrar_por_estado_bsb(vet, estado);
+            Vetor_bsb *sub_vet_abb = filtrar_por_estado_bsb(vet_abb, estado);
             fim = clock();
             tempo_bsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
-            if (candidato != NULL)
+            if (!bsb_vazia(sub_vet_abb))
             {
-                imprimirCandidatoCompleto(*candidato);
+                bsb_imprimir(sub_vet_abb);
             }
             else
             {
@@ -199,12 +198,12 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
 
             // Pesquisa Binária
             inicio = clock();
-            // ARRUMAR candidato = filtrar_por_cidade_bsb(vet, cidade);
+            sub_vet_abb = filtrar_por_cidade_bsb(vet_abb, cidade);
             fim = clock();
             tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-            if (candidato != NULL)
+            if (!bsb_vazia(sub_vet_abb))
             {
-                imprimirCandidatoCompleto(*candidato);
+                bsb_imprimir(sub_vet_abb);
             }
             else
             {
@@ -253,18 +252,17 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
             scanf(" %[^\n]", cidade);
             // Converte para tudo maiusculo
 
-
             printf("Digite o numero: ");
             scanf("%s", numero);
 
             // Pesquisa Binária
             inicio = clock();
-            // ARRUMAR candidato = filtrar_por_chave_bsb(vet, 'N', numero);
+            sub_vet_abb = filtrar_por_chave_bsb(vet_abb, 'N', numero);
             fim = clock();
             tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-            if (candidato != NULL)
+            if (!bsb_vazia(sub_vet_abb))
             {
-                imprimirCandidatoCompleto(*candidato);
+                bsb_imprimir(sub_vet_abb);
             }
             else
             {
@@ -312,9 +310,10 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
     } while (opcao_menu != 0);
 
     // Liberar memória
-    free(candidatos);
+    bsb_liberar(vet_abb);
     abb_liberar(arv_abb);
     avl_liberar(arv_avl);
+    free(candidatos);
 
     return 0;
 }
