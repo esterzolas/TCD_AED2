@@ -10,6 +10,8 @@
 int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
 Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
 void imprimirCandidatoCompleto(Candidato c);
+void criar_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, char estado[], char cidade[], char partido[], char genero[], char cor_raca[]);
+void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double tempo_abb, double tempo_avl, double tempo_bsb);
 
 // Implementações
 /*
@@ -22,7 +24,7 @@ distintas:
 2. Árvore Binária de Busca sem balanceamento.
 3. Árvore AVL.
 O programa deve permitir que:
-A. O usuário escolha um arquivo de texto para ser carregado nas estruturas de dados(opção de escolher entre 2 arquivos, 
+A. O usuário escolha um arquivo de texto para ser carregado nas estruturas de dados(opção de escolher entre 2 arquivos,
 eleicoe2024 ou subConjuntoEleicoes2024),
 considerando cada um dos 3 casos citados. Após a carga dos dados nas estruturas, deve
 ser exibido o tempo para cada uma. A função de inserção deverá ser modificada para
@@ -39,7 +41,8 @@ int main()
     printf("Escolha um opcao de arquivo para carregar os dados:\n");
     printf("1 - eleicoes2024\n");
     printf("2 - subConjuntoEleicoes2024\n");
-    //colocar 3 sub conuntos no total? um de 50, outro de 500 e outro de 5000
+    printf("Opcao: ");
+    // colocar 3 sub conuntos no total? um de 50, outro de 500 e outro de 5000
 
     int opcao;
     scanf("%d", &opcao);
@@ -61,7 +64,7 @@ int main()
     {
         return 1;
     }
-    
+
     clock_t inicio, fim;
     double tempo;
 
@@ -75,8 +78,8 @@ int main()
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
-    //bsb_imprimir(vet_abb);
-    printf("TIRAR DEPOIS Foram lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
+    // bsb_imprimir(vet_abb);
+    printf("\nForam lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
     printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
 
     // Árvore Binária de Busca
@@ -104,15 +107,14 @@ int main()
     // Menu de opções
     /*
     O usuário escolha opções de busca de informações de candidatos:
-B1) Buscar os dados dos candidatos de um dado estado
-B2) Dado um estado, buscar os dados dos candidatos de uma dada cidade
-B3) Dado um estado e uma cidade, buscar os dados do(a) candidato(a) de um
-dado número
-O resultado da busca deve ser exibido para as três situações programadas, assim como o
-tempo de processamento da consulta. A função de busca deverá ser modificada para
-considerar a ordenação baseada em três campos como descrito anteriormente.
-
+    B1) Buscar os dados dos candidatos de um dado estado
+    B2) Dado um estado, buscar os dados dos candidatos de uma dada cidade
+    B3) Dado um estado e uma cidade, buscar os dados do(a) candidato(a) de um dado número
+    O resultado da busca deve ser exibido para as três situações programadas, assim como o
+    tempo de processamento da consulta. A função de busca deverá ser modificada para
+    considerar a ordenação baseada em três campos como descrito anteriormente.
     */
+
     int opcao_menu = -1;
     char estado[2], cidade[100], numero[6];
     Candidato *candidato;
@@ -123,14 +125,16 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
         printf("1 - Dados dos candidatos de um dado estado\n");
         printf("2 - Dados dos candidatos de uma dada cidade\n");
         printf("3 - Dados do(a) candidato(a) de um dado numero\n");
+        printf("4 - Criar lista com filtros\n");
         printf("0 - Sair\n");
+        printf("Opcao: ");
         scanf("%d", &opcao_menu);
 
         switch (opcao_menu)
         {
         case 1:
             // melhorar para aceitar só o UFs BR
-            printf("Digite o UF: ");
+            printf("\nDigite o UF: ");
             scanf("%s", estado);
 
             // Converte para tudo maiusculo
@@ -187,7 +191,7 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
 
         case 2:
             // mesma coisa aqui
-            printf("Digite o UF: ");
+            printf("\nDigite o UF: ");
             scanf("%s", estado);
 
             printf("Digite a cidade: ");
@@ -243,7 +247,7 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
 
         case 3:
             // mesma coisa aqui
-            printf("Digite o UF: ");
+            printf("\nDigite o UF: ");
             scanf("%s", estado);
 
             printf("Digite a cidade: ");
@@ -297,6 +301,40 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
             }
             printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
             opcao_menu = -1;
+            break;
+
+        case 4:;
+            opcao_menu = -1;
+            char estado[MAX_TAM_ESTADO];
+            char cidade[MAX_TAM_CIDADE];
+            char partido[MAX_TAM_SIGLA_PARTIDO];
+            char genero[MAX_TAM_GENERO];
+            char cor_raca[MAX_TAM_COR_RACA];
+
+            //melhor: aceita somente maiusculos atualmente e nao faz nenhuma validação
+
+            printf("Filtros de Listagem (digite NA para ignorar o filtro):\n");
+            printf("Estado: ");
+            setbuf(stdin, NULL);
+            scanf("%s", estado);
+
+            printf("Cidade: ");
+            setbuf(stdin, NULL);
+            scanf("%[^\n]s", cidade);
+
+            printf("Partido: ");
+            setbuf(stdin, NULL);
+            scanf("%s", partido);
+
+            printf("Genero (Masculino ou Feminino): ");
+            setbuf(stdin, NULL);
+            scanf("%s", genero);
+
+            printf("Cor/Raca: ");
+            setbuf(stdin, NULL);
+            scanf("%[^\n]s", cor_raca);
+
+            criar_listagem(arv_abb, arv_avl, vet_abb, estado, cidade, partido, genero, cor_raca);
             break;
 
         case 0:
@@ -367,4 +405,225 @@ void imprimirCandidatoCompleto(Candidato c)
     printf("Grau de instrucao: %s\n", c.grau_instrucao);
     printf("Cor/Raca: %s\n", c.cor_raca);
     printf("--------------------\n");
+}
+
+void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double tempo_abb, double tempo_avl, double tempo_bsb)
+{
+    int opcao_menu = -1;
+    do
+    {
+        printf("\nEscolha uma opcao de listagem do resultado da filtragem:\n");
+        printf("1 - Listar pela ABB\n");
+        printf("2 - Listar pela AVL\n");
+        printf("3 - Listar pela BSB\n");
+        printf("4 - Listar tempos de execucao\n");
+        printf("0 - Nao listar (sair)\n");
+        scanf("%d", &opcao_menu);
+
+        switch (opcao_menu)
+        {
+        case 1:
+            opcao_menu = -1;
+            do
+            {
+                printf("\nEscolha uma opcao de listagem da ABB:\n");
+                printf("1 - In-ordem\n");
+                printf("2 - Pre-ordem\n");
+                printf("3 - Pos-ordem\n");
+                printf("0 - Voltar\n");
+                scanf("%d", &opcao_menu);
+
+                switch (opcao_menu)
+                {
+                case 1:
+                    printf("---- Listagem ABB in ordem ----\n");
+                    abb_imprimir_in_ordem(abb);
+                    break;
+                case 2:
+                    printf("---- Listagem ABB pre ordem ----\n");
+                    abb_imprimir_pre_ordem(abb);
+                    break;
+                case 3:
+                    printf("---- Listagem ABB pos ordem ----\n");
+                    abb_imprimir_pos_ordem(abb);
+                    break;
+                case 0:
+                    printf("Voltando...\n");
+                    break;
+                default:
+                    printf("Opcao invalida.\n");
+                    break;
+                }
+            } while (opcao_menu != 0);
+            opcao_menu = -1;
+            break;
+        case 2:
+            opcao_menu = -1;
+            do
+            {
+                printf("\nEscolha uma opcao de listagem da AVL:\n");
+                printf("1 - In-ordem\n");
+                printf("2 - Pre-ordem\n");
+                printf("3 - Pos-ordem\n");
+                printf("0 - Voltar\n");
+                scanf("%d", &opcao_menu);
+
+                switch (opcao_menu)
+                {
+                case 1:
+                    printf("---- Listagem AVL in ordem ----\n");
+                    avl_imprimir_in_ordem(avl);
+                    break;
+                case 2:
+                    printf("---- Listagem AVL pre ordem ----\n");
+                    avl_imprimir_pre_ordem(avl);
+                    break;
+                case 3:
+                    printf("---- Listagem AVL pos ordem ----\n");
+                    avl_imprimir_pos_ordem(avl);
+                    break;
+                case 0:
+                    printf("Voltando...\n");
+                    break;
+                default:
+                    printf("Opcao invalida.\n");
+                    break;
+                }
+            } while (opcao_menu != 0);
+            opcao_menu = -1;
+            break;
+        case 3:
+            opcao_menu = -1;
+            printf("---- Listagem BSB ----\n");
+            bsb_imprimir(bsb);
+            break;
+
+        case 4:
+            opcao_menu = -1;
+            printf("Tempo de execucao da ABB: %.6f segundos\n", tempo_abb);
+            printf("Tempo de execucao da AVL: %.6f segundos\n", tempo_avl);
+            printf("Tempo de execucao da BSB: %.6f segundos\n", tempo_bsb);
+            break;
+
+        case 0:
+            printf("Saindo...\n");
+            break;
+        default:
+            printf("Opcao invalida.\n");
+            break;
+        }
+    } while (opcao_menu != 0);
+}
+
+void criar_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, char estado[], char cidade[], char partido[], char genero[], char cor_raca[])
+{
+    clock_t inicio, fim;
+
+    // Aplicar filtros para ABB e guardar tempo usado
+    double tempo_abb = 0;
+    inicio = clock();
+    Arvore_abb *resultado_abb = abb; // Começa com a árvore completa
+    if (strcmp(estado, "NA") != 0)
+    {
+        resultado_abb = filtrar_por_estado_abb(resultado_abb, estado);
+    }
+    if (strcmp(cidade, "NA") != 0)
+    {
+        resultado_abb = filtrar_por_cidade_abb(resultado_abb, cidade);
+    }
+    if (strcmp(partido, "NA") != 0)
+    {
+        resultado_abb = filtrar_por_chave_abb(resultado_abb, 'P', partido);
+    }
+    if (strcmp(genero, "NA") != 0)
+    {
+        resultado_abb = filtrar_por_chave_abb(resultado_abb, 'G', genero);
+    }
+    if (strcmp(cor_raca, "NA") != 0)
+    {
+        resultado_abb = filtrar_por_chave_abb(resultado_abb, 'R', cor_raca);
+    }
+    fim = clock();
+    tempo_abb = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    // Aplicar filtros para AVL e guardar tempo usado
+    double tempo_avl = 0;
+    inicio = clock();
+    Arvore_avl *resultado_avl = avl; // Começa com a árvore completa
+    if (strcmp(estado, "NA") != 0)
+    {
+        resultado_avl = filtrar_por_estado_avl(resultado_avl, estado);
+    }
+    if (strcmp(cidade, "NA") != 0)
+    {
+        resultado_avl = filtrar_por_cidade_avl(resultado_avl, cidade);
+    }
+    if (strcmp(partido, "NA") != 0)
+    {
+        resultado_avl = filtrar_por_chave_avl(resultado_avl, 'P', partido);
+    }
+    if (strcmp(genero, "NA") != 0)
+    {
+        resultado_avl = filtrar_por_chave_avl(resultado_avl, 'G', genero);
+    }
+    if (strcmp(cor_raca, "NA") != 0)
+    {
+        resultado_avl = filtrar_por_chave_avl(resultado_avl, 'R', cor_raca);
+    }
+    fim = clock();
+    tempo_avl = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    // Aplicar filtros para BSB e guardar tempo usado
+    double tempo_bsb = 0;
+    inicio = clock();
+    Vetor_bsb *resultado_bsb = bsb; // Começa com o vetor completo
+    if (strcmp(estado, "NA") != 0)
+    {
+        resultado_bsb = filtrar_por_estado_bsb(resultado_bsb, estado);
+    }
+    if (strcmp(cidade, "NA") != 0)
+    {
+        resultado_bsb = filtrar_por_cidade_bsb(resultado_bsb, cidade);
+    }
+    if (strcmp(partido, "NA") != 0)
+    {
+        resultado_bsb = filtrar_por_chave_bsb(resultado_bsb, 'P', partido);
+    }
+    if (strcmp(genero, "NA") != 0)
+    {
+        resultado_bsb = filtrar_por_chave_bsb(resultado_bsb, 'G', genero);
+    }
+    if (strcmp(cor_raca, "NA") != 0)
+    {
+        resultado_bsb = filtrar_por_chave_bsb(resultado_bsb, 'R', cor_raca);
+    }
+    fim = clock();
+    tempo_bsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    if (abb_vazia(resultado_abb) && avl_vazia(resultado_avl) && bsb_vazia(resultado_bsb))
+    {
+        printf("\nNenhum candidato encontrado com os filtros especificados.\n");
+        return;
+    }
+    else
+    {
+        printf("\nForam encontrados %d candidatos com os filtros especificados.\n", abb_tamanho(resultado_abb));
+        imprimir_listagem(resultado_abb, resultado_avl, resultado_bsb, tempo_abb, tempo_avl, tempo_bsb);
+    }
+
+    // Liberar memória das estruturas temporárias se forem diferentes das originais
+    if (resultado_abb != abb)
+    {
+        abb_liberar(resultado_abb);
+    }
+
+    if (resultado_avl != avl)
+    {
+        avl_liberar(resultado_avl);
+    }
+
+    if (resultado_bsb != bsb)
+    {
+        bsb_liberar(resultado_bsb);
+    }
 }
