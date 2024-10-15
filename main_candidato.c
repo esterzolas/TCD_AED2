@@ -10,8 +10,6 @@
 int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
 int compararCandidatos(const void *a, const void *b);
 Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
-void cadastrarCandidato(Candidato *candidatos, int *num_candidatos);
-void atualizarArquivoCandidatos(char *nomeArquivo, Candidato *candidatos, int num_candidatos);
 void imprimirCandidatoCompleto(Candidato c);
 
 // Implementações
@@ -355,80 +353,6 @@ int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_can
 
     fclose(arquivo);
     return 1;
-}
-
-int compararCandidatos(const void *a, const void *b)
-{
-    Candidato *c1 = (Candidato *)a;
-    Candidato *c2 = (Candidato *)b;
-
-    int cmpEstado = strcmp(c1->estado, c2->estado);
-    if (cmpEstado != 0)
-        return cmpEstado;
-
-    int cmpCidade = strcmp(c1->cidade, c2->cidade);
-    if (cmpCidade != 0)
-        return cmpCidade;
-
-    return c1->numero_urna - c2->numero_urna;
-}
-
-void cadastrarCandidato(Candidato *candidatos, int *num_candidatos)
-{
-    printf("Digite o estado: ");
-    scanf("%2s", candidatos[*num_candidatos].estado);
-
-    printf("Digite a cidade: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].cidade);
-
-    printf("Digite o numero: ");
-    scanf("%d", &candidatos[*num_candidatos].numero_urna);
-
-    printf("Digite o cargo: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].cargo);
-
-    printf("Digite o nome completo: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].nome);
-
-    printf("Digite o nome de urna: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].nome_urna);
-
-    printf("Digite o partido: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].sigla_partido);
-
-    printf("Digite o genero: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].genero);
-
-    printf("Digite o grau de instrucao: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].grau_instrucao);
-
-    printf("Digite a cor/raca: ");
-    scanf(" %[^\n]", candidatos[*num_candidatos].cor_raca);
-
-    (*num_candidatos)++;
-    printf("Candidato cadastrado com sucesso!\n");
-}
-
-void atualizarArquivoCandidatos(char *nomeArquivo, Candidato *candidatos, int num_candidatos)
-{
-    FILE *arquivo = fopen(nomeArquivo, "w");
-    if (arquivo == NULL)
-    {
-        printf("Erro ao abrir o arquivo para atualizacao!\n");
-        return;
-    }
-
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        fprintf(arquivo, "%s  %s  %d  %s  %s  %s  %s  %s  %s  %s\n",
-                candidatos[i].estado, candidatos[i].cidade, candidatos[i].numero_urna,
-                candidatos[i].cargo, candidatos[i].nome, candidatos[i].nome_urna,
-                candidatos[i].sigla_partido, candidatos[i].genero, candidatos[i].grau_instrucao,
-                candidatos[i].cor_raca);
-    }
-
-    fclose(arquivo);
-    printf("Arquivo atualizado com sucesso!\n");
 }
 
 void imprimirCandidatoCompleto(Candidato c)
