@@ -306,10 +306,10 @@ Arvore_abb *filtrar_por_estado_abb(Arvore_abb *arv, char estado[])
         copiar_subarvore_abb(atual->dir, sub_arv, estado);
     }
 
-    if (abb_vazia(sub_arv))
+    /*if (abb_vazia(sub_arv))
     {
         printf("Nenhum candidato encontrado no estado.\n");
-    }
+    }*/
 
     return sub_arv;
 }
@@ -351,10 +351,10 @@ Arvore_abb *filtrar_por_cidade_abb(Arvore_abb *arv, char cidade[])
         copiar_subarvore_cidade_abb(atual->dir, sub_arv, cidade);
     }
 
-    if (abb_vazia(sub_arv))
+    /*if (abb_vazia(sub_arv))
     {
         printf("Nenhum candidato encontrado na cidade.\n");
-    }
+    }*/
 
     return sub_arv;
 }
@@ -396,10 +396,10 @@ Arvore_abb *filtrar_por_chave_abb(Arvore_abb *arv, char chave, char argumento[])
         copiar_subarvore_chave_abb(atual->dir, sub_arv, chave, argumento);
     }
 
-    if (abb_vazia(sub_arv))
+    /*if (abb_vazia(sub_arv))
     {
         printf("Nenhum candidato encontrado no estado.\n");
-    }
+    }*/
 
     return sub_arv;
 }

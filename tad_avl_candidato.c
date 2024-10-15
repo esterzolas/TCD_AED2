@@ -407,10 +407,10 @@ Arvore_avl *filtrar_por_estado_avl(Arvore_avl *arv, char estado[])
         copiar_subarvore_avl(atual->dir, sub_arv, estado);
     }
 
-    if (avl_vazia(sub_arv))
+    /*if (avl_vazia(sub_arv))
     {
         printf("Nenhum candidato encontrado no estado.\n");
-    }
+    }*/
 
     return sub_arv;
 }
@@ -452,10 +452,10 @@ Arvore_avl *filtrar_por_cidade_avl(Arvore_avl *arv, char cidade[])
         copiar_subarvore_cidade_avl(atual->dir, sub_arv, cidade);
     }
 
-    if (avl_vazia(sub_arv))
+    /*if (avl_vazia(sub_arv))
     {
         printf("Nenhum candidato encontrado na cidade.\n");
-    }
+    }*/
 
     return sub_arv;
 }
@@ -497,10 +497,10 @@ Arvore_avl *filtrar_por_chave_avl(Arvore_avl *arv, char chave, char argumento[])
         copiar_subarvore_chave_avl(atual->dir, sub_arv, chave, argumento);
     }
 
-    if (avl_vazia(sub_arv))
+    /*if (avl_vazia(sub_arv))
     {
         printf("Nenhum candidato encontrado no estado.\n");
-    }
+    }*/
 
     return sub_arv;
 }

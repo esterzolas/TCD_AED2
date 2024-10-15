@@ -38,7 +38,7 @@ int main()
     int num_candidatos;
 
     // Ler arquivo de candidatos
-    char nomeArquivo[100];
+    char nomeArquivo[150];
     printf("Escolha um opcao de arquivo para carregar os dados:\n");
     printf("1 - eleicoes2024\n");
     printf("2 - subConjuntoEleicoes2024\n");
@@ -48,11 +48,11 @@ int main()
     scanf("%d", &opcao);
     if (opcao == 1)
     {
-        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\eleicoes2024.txt");
+        strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\eleicoes2024.txt");
     }
     else if (opcao == 2)
     {
-        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\subConjuntoEleicoes2024.txt");
     }
     else
     {
@@ -78,7 +78,7 @@ int main()
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
-    bsb_imprimir(vet_abb);
+    //bsb_imprimir(vet_abb);
     printf("TIRAR DEPOIS Foram lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
     printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
 
@@ -116,7 +116,7 @@ tempo de processamento da consulta. A função de busca deverá ser modificada p
 considerar a ordenação baseada em três campos como descrito anteriormente.
 
     */
-    int opcao_menu;
+    int opcao_menu = -1;
     char estado[2], cidade[100], numero[6];
     Candidato *candidato;
 
@@ -185,6 +185,7 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
             printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo_bsb);
             printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo_abb);
             printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo_avl);
+            opcao_menu = -1;
             break;
 
         case 2:
@@ -240,7 +241,7 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
                 printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
             }
             printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
-
+            opcao_menu = -1;
             break;
 
         case 3:
@@ -298,9 +299,11 @@ considerar a ordenação baseada em três campos como descrito anteriormente.
                 printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
             }
             printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
+            opcao_menu = -1;
             break;
 
         case 0:
+            printf("Saindo...\n");
             break;
 
         default:

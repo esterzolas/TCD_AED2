@@ -14,10 +14,10 @@ typedef struct
 } Vetor_bsb;
 
 // Funções auxiliares
-int comparar_candidatos_bsb(Candidato c1, Candidato c2);
-void imprimir_candidato_completo_bsb(Candidato c);
-void imprimir_candidato_simples_bsb(Candidato c);
-int bsb_redimensionar(Vetor_bsb *vet, int nova_capacidade);
+//int comparar_candidatos_bsb(Candidato c1, Candidato c2);
+//void imprimir_candidato_completo_bsb(Candidato c);
+//void imprimir_candidato_simples_bsb(Candidato c);
+//int bsb_redimensionar(Vetor_bsb *vet, int nova_capacidade);
 
 // Funções de manipulação da Busca Binária em Vetor
 Vetor_bsb *bsb_criar();
