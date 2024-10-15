@@ -8,7 +8,6 @@
 
 // Funções de leitura e escrita de arquivos
 int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
-int compararCandidatos(const void *a, const void *b);
 Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
 void imprimirCandidatoCompleto(Candidato c);
 
