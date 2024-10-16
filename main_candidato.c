@@ -18,12 +18,10 @@ int validar_entrada_em_todas(char chave, char entrada[], Arvore_abb *abb, Arvore
 int percorrer_e_comparar_abb(No_abb *no, char *valor, char chave);
 int percorrer_e_comparar_avl(No_avl *no, char *valor, char chave);
 int percorrer_e_comparar_bsb(Vetor_bsb *vet, char *valor, char chave);
-void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb);
+void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_bsb);
 
 int main()
 {
-    Candidato *candidatos;
-    int num_candidatos;
     clock_t inicio, fim;
     double tempo;
 
@@ -54,56 +52,12 @@ int main()
     // Ler arquivo e inserir candidatos nas estruturas
     Arvore_abb *arv_abb = abb_criar();
     Arvore_avl *arv_avl = avl_criar();
-    Vetor_bsb *vet_abb = bsb_criar();
+    Vetor_bsb *vet_bsb = bsb_criar();
     double tempo_abb, tempo_avl, tempo_bsb;
-    ler_arquivo(nomeArquivo, &arv_abb, &arv_avl, &vet_abb, &tempo_abb, &tempo_avl, &tempo_bsb);
+    ler_arquivo(nomeArquivo, &arv_abb, &arv_avl, &vet_bsb, &tempo_abb, &tempo_avl, &tempo_bsb);
 
     // Imprimir listagem
-    imprimir_listagem(arv_abb, arv_avl, vet_abb, tempo_abb, tempo_avl, tempo_bsb);
-
-    /*if (!lerArquivoCandidatos(nomeArquivo, &candidatos, &num_candidatos))
-    {
-        return 1;
-    }
-
-    clock_t inicio, fim;
-    double tempo;
-
-    // Pesquisa Binária
-    inicio = clock();
-    Vetor_bsb *vet_abb = bsb_criar();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        bsb_inserir(vet_abb, candidatos[i]);
-    }
-    fim = clock();
-    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-
-    // bsb_imprimir(vet_abb);
-    printf("\nForam lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
-    printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
-
-    // Árvore Binária de Busca
-    Arvore_abb *arv_abb = abb_criar();
-    inicio = clock();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        abb_inserir(arv_abb, candidatos[i]);
-    }
-    fim = clock();
-    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenacao por Arvore Binaria de Busca: %.6f segundos\n", tempo);
-
-    // Árvore AVL
-    Arvore_avl *arv_avl = avl_criar();
-    inicio = clock();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        avl_inserir(arv_avl, candidatos[i]);
-    }
-    fim = clock();
-    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);*/
+    imprimir_listagem(arv_abb, arv_avl, vet_bsb, tempo_abb, tempo_avl, tempo_bsb);
 
     int opcao_menu = -1;
     char estado[2], cidade[100], numero[6];
@@ -132,12 +86,12 @@ int main()
             // Pesquisa Binária
             double tempo_bsb = 0;
             inicio = clock();
-            Vetor_bsb *sub_vet_abb = filtrar_por_estado_bsb(vet_abb, estado);
+            Vetor_bsb *sub_vet_bsb = filtrar_por_estado_bsb(vet_bsb, estado);
             fim = clock();
             tempo_bsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
-            if (!bsb_vazia(sub_vet_abb))
+            if (!bsb_vazia(sub_vet_bsb))
             {
-                bsb_imprimir(sub_vet_abb);
+                bsb_imprimir(sub_vet_bsb);
             }
             else
             {
@@ -190,12 +144,12 @@ int main()
 
             // Pesquisa Binária
             inicio = clock();
-            sub_vet_abb = filtrar_por_cidade_bsb(vet_abb, cidade);
+            sub_vet_bsb = filtrar_por_cidade_bsb(vet_bsb, cidade);
             fim = clock();
             tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-            if (!bsb_vazia(sub_vet_abb))
+            if (!bsb_vazia(sub_vet_bsb))
             {
-                bsb_imprimir(sub_vet_abb);
+                bsb_imprimir(sub_vet_bsb);
             }
             else
             {
@@ -249,12 +203,12 @@ int main()
 
             // Pesquisa Binária
             inicio = clock();
-            sub_vet_abb = filtrar_por_chave_bsb(vet_abb, 'N', numero);
+            sub_vet_bsb = filtrar_por_chave_bsb(vet_bsb, 'N', numero);
             fim = clock();
             tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-            if (!bsb_vazia(sub_vet_abb))
+            if (!bsb_vazia(sub_vet_bsb))
             {
-                bsb_imprimir(sub_vet_abb);
+                bsb_imprimir(sub_vet_bsb);
             }
             else
             {
@@ -295,7 +249,7 @@ int main()
 
         case 4:;
             opcao_menu = -1;
-            listagem_case(arv_abb, arv_avl, vet_abb);
+            listagem_case(arv_abb, arv_avl, vet_bsb);
             break;
 
         case 0:
@@ -309,10 +263,9 @@ int main()
     } while (opcao_menu != 0);
 
     // Liberar memória
-    bsb_liberar(vet_abb);
+    bsb_liberar(vet_bsb);
     abb_liberar(arv_abb);
     avl_liberar(arv_avl);
-    free(candidatos);
 
     return 0;
 }
@@ -387,42 +340,6 @@ void ler_arquivo(char nome_arquivo[], Arvore_abb **abb, Arvore_avl **avl, Vetor_
     fclose(arquivo);
 }
 
-// Funções de leitura e escrita de arquivos
-// ESTADO;CIDADE;NR_CANDIDATO;CARGO;NM_CANDIDATO;NM_URNA_CANDIDATO;SG_PARTIDO;GENERO;GRAU_INSTRUCAO;COR_RACA
-/*int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos)
-{
-    FILE *arquivo = fopen(nomeArquivo, "r");
-    if (arquivo == NULL)
-    {
-        printf("Erro ao abrir o arquivo %s!\n", nomeArquivo);
-        return 0;
-    }
-
-    *candidatos = (Candidato *)malloc(MAX_CANDIDATOS * sizeof(Candidato));
-    if (*candidatos == NULL)
-    {
-        printf("Erro ao alocar memória para os candidatos!\n");
-        fclose(arquivo);
-        return 0;
-    }
-
-    *num_candidatos = 0;
-    char linha[512];
-    while (fgets(linha, sizeof(linha), arquivo))
-    {
-        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
-               (*candidatos)[*num_candidatos].estado, (*candidatos)[*num_candidatos].cidade,
-               (*candidatos)[*num_candidatos].numero_urna, (*candidatos)[*num_candidatos].cargo,
-               (*candidatos)[*num_candidatos].nome, (*candidatos)[*num_candidatos].nome_urna,
-               (*candidatos)[*num_candidatos].sigla_partido, (*candidatos)[*num_candidatos].genero,
-               (*candidatos)[*num_candidatos].grau_instrucao, (*candidatos)[*num_candidatos].cor_raca);
-        (*num_candidatos)++;
-    }
-
-    fclose(arquivo);
-    return 1;
-}*/
-
 void imprimirCandidatoCompleto(Candidato c)
 {
     printf("Nome: %s\n", c.nome);
@@ -449,6 +366,7 @@ void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double 
         printf("3 - Listar pela BSB\n");
         printf("4 - Listar tempos de execucao\n");
         printf("0 - Nao listar (voltar/prosseguir)\n");
+        printf("Opcao: ");
         scanf("%d", &opcao_menu);
 
         switch (opcao_menu)
@@ -462,6 +380,7 @@ void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double 
                 printf("2 - Pre-ordem\n");
                 printf("3 - Pos-ordem\n");
                 printf("0 - Voltar\n");
+                printf("Opcao: ");
                 scanf("%d", &opcao_menu);
 
                 switch (opcao_menu)
@@ -677,9 +596,9 @@ int validar_entrada_em_todas(char chave, char entrada[], Arvore_abb *abb, Arvore
     encontrado_bsb = (percorrer_e_comparar_bsb(bsb, entrada, chave)) ? 1 : 0;
 
     // Verificar se encontrou em todas as estruturas
-    if (encontrado_abb && encontrado_avl && encontrado_bsb)
+    if ((encontrado_abb + encontrado_avl + encontrado_bsb) != 0)
     {
-        return 3; // Encontrou em todas
+        return 3; // Encontrou em AO MENOS uma estrutura
     }
 
     return 0; // Não encontrou em todas as estruturas
@@ -821,7 +740,7 @@ int percorrer_e_comparar_bsb(Vetor_bsb *vet, char *valor, char chave)
     return 0; // Valor não encontrado no vetor
 }
 
-void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
+void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_bsb)
 {
     char estado[MAX_TAM_ESTADO];
     char cidade[MAX_TAM_CIDADE];
@@ -836,14 +755,14 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
     setbuf(stdin, NULL);
     scanf("%s", estado);
 
-    for (int i = 0; estado[i]; i++)
+    for (int i = 0; i < strlen(estado); i++)
     {
         estado[i] = toupper(estado[i]);
     }
 
     if (strcmp(estado, "NA") != 0)
     {
-        int valido = validar_entrada_em_todas('E', estado, arv_abb, arv_avl, vet_abb);
+        int valido = validar_entrada_em_todas('E', estado, arv_abb, arv_avl, vet_bsb);
         if (valido == 3)
         {
             printf("Estado encontrado e valido.\n");
@@ -859,14 +778,14 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
     setbuf(stdin, NULL);
     scanf("%[^\n]s", cidade);
 
-    for (int i = 0; cidade[i]; i++)
+    for (int i = 0; i < strlen(cidade); i++)
     {
         cidade[i] = toupper(cidade[i]);
     }
 
     if (strcmp(cidade, "NA") != 0)
     {
-        int valido = validar_entrada_em_todas('C', cidade, arv_abb, arv_avl, vet_abb);
+        int valido = validar_entrada_em_todas('C', cidade, arv_abb, arv_avl, vet_bsb);
         if (valido == 3)
         {
             printf("Cidade encontrada e valida.\n");
@@ -880,16 +799,16 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
 
     printf("\nPartido: ");
     setbuf(stdin, NULL);
-    scanf("%s", partido);
+    scanf("%[^\n]s", partido);
 
-    for (int i = 0; partido[i]; i++)
+    for (int i = 0; i < strlen(partido); i++)
     {
         partido[i] = toupper(partido[i]);
     }
 
     if (strcmp(partido, "NA") != 0)
     {
-        int valido = validar_entrada_em_todas('P', partido, arv_abb, arv_avl, vet_abb);
+        int valido = validar_entrada_em_todas('P', partido, arv_abb, arv_avl, vet_bsb); 
         if (valido == 3)
         {
             printf("Partido encontrado e valido.\n");
@@ -905,14 +824,14 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
     setbuf(stdin, NULL);
     scanf("%s", genero);
 
-    for (int i = 0; genero[i]; i++)
+    for (int i = 0; i < strlen(genero); i++)
     {
         genero[i] = toupper(genero[i]);
     }
 
     if (strcmp(genero, "NA") != 0)
     {
-        int valido = validar_entrada_em_todas('G', genero, arv_abb, arv_avl, vet_abb);
+        int valido = validar_entrada_em_todas('G', genero, arv_abb, arv_avl, vet_bsb);
         if (valido == 3)
         {
             printf("Genero encontrado e valido.\n");
@@ -928,14 +847,14 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
     setbuf(stdin, NULL);
     scanf("%[^\n]s", cor_raca);
 
-    for (int i = 0; cor_raca[i]; i++)
+    for (int i = 0; i < strlen(cor_raca); i++)
     {
         cor_raca[i] = toupper(cor_raca[i]);
     }
 
     if (strcmp(cor_raca, "NA") != 0)
     {
-        int valido = validar_entrada_em_todas('R', cor_raca, arv_abb, arv_avl, vet_abb);
+        int valido = validar_entrada_em_todas('R', cor_raca, arv_abb, arv_avl, vet_bsb);
         if (valido == 3)
         {
             printf("Cor/Raca encontrada e valida.\n");
@@ -947,5 +866,87 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
         }
     }
 
-    criar_listagem(arv_abb, arv_avl, vet_abb, estado, cidade, partido, genero, cor_raca);
+    criar_listagem(arv_abb, arv_avl, vet_bsb, estado, cidade, partido, genero, cor_raca);
 }
+
+//parte da esterzolas sobre a leitura do arquivo que mudei um pouco. aguardando feedback para poder excluir tudo abaixo ou não.
+
+// Funções de leitura e escrita de arquivos
+// ESTADO;CIDADE;NR_CANDIDATO;CARGO;NM_CANDIDATO;NM_URNA_CANDIDATO;SG_PARTIDO;GENERO;GRAU_INSTRUCAO;COR_RACA
+/*int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos)
+{
+    FILE *arquivo = fopen(nomeArquivo, "r");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo %s!\n", nomeArquivo);
+        return 0;
+    }
+
+    *candidatos = (Candidato *)malloc(MAX_CANDIDATOS * sizeof(Candidato));
+    if (*candidatos == NULL)
+    {
+        printf("Erro ao alocar memória para os candidatos!\n");
+        fclose(arquivo);
+        return 0;
+    }
+
+    *num_candidatos = 0;
+    char linha[512];
+    while (fgets(linha, sizeof(linha), arquivo))
+    {
+        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
+               (*candidatos)[*num_candidatos].estado, (*candidatos)[*num_candidatos].cidade,
+               (*candidatos)[*num_candidatos].numero_urna, (*candidatos)[*num_candidatos].cargo,
+               (*candidatos)[*num_candidatos].nome, (*candidatos)[*num_candidatos].nome_urna,
+               (*candidatos)[*num_candidatos].sigla_partido, (*candidatos)[*num_candidatos].genero,
+               (*candidatos)[*num_candidatos].grau_instrucao, (*candidatos)[*num_candidatos].cor_raca);
+        (*num_candidatos)++;
+    }
+
+    fclose(arquivo);
+    return 1;
+}*/
+
+/*if (!lerArquivoCandidatos(nomeArquivo, &candidatos, &num_candidatos))
+    {
+        return 1;
+    }
+
+    clock_t inicio, fim;
+    double tempo;
+
+    // Pesquisa Binária
+    inicio = clock();
+    Vetor_bsb *vet_bsb = bsb_criar();
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        bsb_inserir(vet_bsb, candidatos[i]);
+    }
+    fim = clock();
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    // bsb_imprimir(vet_bsb);
+    printf("\nForam lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
+    printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
+
+    // Árvore Binária de Busca
+    Arvore_abb *arv_abb = abb_criar();
+    inicio = clock();
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        abb_inserir(arv_abb, candidatos[i]);
+    }
+    fim = clock();
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo de ordenacao por Arvore Binaria de Busca: %.6f segundos\n", tempo);
+
+    // Árvore AVL
+    Arvore_avl *arv_avl = avl_criar();
+    inicio = clock();
+    for (int i = 0; i < num_candidatos; i++)
+    {
+        avl_inserir(arv_avl, candidatos[i]);
+    }
+    fim = clock();
+    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);*/
