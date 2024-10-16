@@ -2,39 +2,30 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 #include "tad_abb_candidato.h"
 #include "tad_avl_candidato.h"
 #include "tad_bsb_candidato.h"
 
 // Funções de leitura e escrita de arquivos
-int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
+// int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
 Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
 void imprimirCandidatoCompleto(Candidato c);
 void criar_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, char estado[], char cidade[], char partido[], char genero[], char cor_raca[]);
 void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double tempo_abb, double tempo_avl, double tempo_bsb);
-
-// Implementações
-/*
-Faça um programa que leia um arquivo texto com as informações dos candidatos e as
-organize, considerando a ordenação baseada nos seguintes campos: estado, cidade e
-número do candidato.
-O processamento das informações dos candidatos deverá realizar-se de três formas
-distintas:
-1. Pesquisa Binária (usando vetor).
-2. Árvore Binária de Busca sem balanceamento.
-3. Árvore AVL.
-O programa deve permitir que:
-A. O usuário escolha um arquivo de texto para ser carregado nas estruturas de dados(opção de escolher entre 2 arquivos,
-eleicoe2024 ou subConjuntoEleicoes2024),
-considerando cada um dos 3 casos citados. Após a carga dos dados nas estruturas, deve
-ser exibido o tempo para cada uma. A função de inserção deverá ser modificada para
-considerar a ordenação baseada em três campos como descrito acima.
-*/
+void ler_arquivo(char nome_arquivo[], Arvore_abb **abb, Arvore_avl **avl, Vetor_bsb **bsb, double *tempo_abb, double *tempo_avl, double *tempo_bsb);
+int validar_entrada_em_todas(char chave, char entrada[], Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb);
+int percorrer_e_comparar_abb(No_abb *no, char *valor, char chave);
+int percorrer_e_comparar_avl(No_avl *no, char *valor, char chave);
+int percorrer_e_comparar_bsb(Vetor_bsb *vet, char *valor, char chave);
+void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb);
 
 int main()
 {
     Candidato *candidatos;
     int num_candidatos;
+    clock_t inicio, fim;
+    double tempo;
 
     // Ler arquivo de candidatos
     char nomeArquivo[150];
@@ -60,7 +51,17 @@ int main()
         return 1;
     }
 
-    if (!lerArquivoCandidatos(nomeArquivo, &candidatos, &num_candidatos))
+    // Ler arquivo e inserir candidatos nas estruturas
+    Arvore_abb *arv_abb = abb_criar();
+    Arvore_avl *arv_avl = avl_criar();
+    Vetor_bsb *vet_abb = bsb_criar();
+    double tempo_abb, tempo_avl, tempo_bsb;
+    ler_arquivo(nomeArquivo, &arv_abb, &arv_avl, &vet_abb, &tempo_abb, &tempo_avl, &tempo_bsb);
+
+    // Imprimir listagem
+    imprimir_listagem(arv_abb, arv_avl, vet_abb, tempo_abb, tempo_avl, tempo_bsb);
+
+    /*if (!lerArquivoCandidatos(nomeArquivo, &candidatos, &num_candidatos))
     {
         return 1;
     }
@@ -102,18 +103,7 @@ int main()
     }
     fim = clock();
     tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);
-
-    // Menu de opções
-    /*
-    O usuário escolha opções de busca de informações de candidatos:
-    B1) Buscar os dados dos candidatos de um dado estado
-    B2) Dado um estado, buscar os dados dos candidatos de uma dada cidade
-    B3) Dado um estado e uma cidade, buscar os dados do(a) candidato(a) de um dado número
-    O resultado da busca deve ser exibido para as três situações programadas, assim como o
-    tempo de processamento da consulta. A função de busca deverá ser modificada para
-    considerar a ordenação baseada em três campos como descrito anteriormente.
-    */
+    printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);*/
 
     int opcao_menu = -1;
     char estado[2], cidade[100], numero[6];
@@ -305,36 +295,7 @@ int main()
 
         case 4:;
             opcao_menu = -1;
-            char estado[MAX_TAM_ESTADO];
-            char cidade[MAX_TAM_CIDADE];
-            char partido[MAX_TAM_SIGLA_PARTIDO];
-            char genero[MAX_TAM_GENERO];
-            char cor_raca[MAX_TAM_COR_RACA];
-
-            //melhor: aceita somente maiusculos atualmente e nao faz nenhuma validação
-
-            printf("Filtros de Listagem (digite NA para ignorar o filtro):\n");
-            printf("Estado: ");
-            setbuf(stdin, NULL);
-            scanf("%s", estado);
-
-            printf("Cidade: ");
-            setbuf(stdin, NULL);
-            scanf("%[^\n]s", cidade);
-
-            printf("Partido: ");
-            setbuf(stdin, NULL);
-            scanf("%s", partido);
-
-            printf("Genero (Masculino ou Feminino): ");
-            setbuf(stdin, NULL);
-            scanf("%s", genero);
-
-            printf("Cor/Raca: ");
-            setbuf(stdin, NULL);
-            scanf("%[^\n]s", cor_raca);
-
-            criar_listagem(arv_abb, arv_avl, vet_abb, estado, cidade, partido, genero, cor_raca);
+            listagem_case(arv_abb, arv_avl, vet_abb);
             break;
 
         case 0:
@@ -356,9 +317,79 @@ int main()
     return 0;
 }
 
+// Função para ler o arquivo e inserir candidatos nas estruturas
+void ler_arquivo(char nome_arquivo[], Arvore_abb **abb, Arvore_avl **avl, Vetor_bsb **bsb, double *tempo_abb, double *tempo_avl, double *tempo_bsb)
+{
+    FILE *arquivo = fopen(nome_arquivo, "r");
+    if (arquivo == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    char linha[512];
+    Candidato candidato;
+    clock_t inicio, fim;
+    int contador = 0;
+
+    // Ler e inserir na ABB
+    inicio = clock();
+    while (fgets(linha, sizeof(linha), arquivo) != NULL)
+    {
+        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
+               candidato.estado, candidato.cidade, candidato.numero_urna, candidato.cargo,
+               candidato.nome, candidato.nome_urna, candidato.sigla_partido,
+               candidato.genero, candidato.grau_instrucao, candidato.cor_raca);
+        abb_inserir(*abb, candidato);
+        contador++;
+    }
+    fim = clock();
+    *tempo_abb = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Foram lidos %d candidatos na ABB.\n", contador);
+
+    rewind(arquivo); // Voltar ao início do arquivo
+
+    // Ler e inserir na AVL
+    contador = 0;
+    inicio = clock();
+    while (fgets(linha, sizeof(linha), arquivo) != NULL)
+    {
+        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
+               candidato.estado, candidato.cidade, candidato.numero_urna, candidato.cargo,
+               candidato.nome, candidato.nome_urna, candidato.sigla_partido,
+               candidato.genero, candidato.grau_instrucao, candidato.cor_raca);
+        avl_inserir(*avl, candidato);
+        contador++;
+    }
+    fim = clock();
+    *tempo_avl = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Foram lidos %d candidatos na AVL.\n", contador);
+
+    rewind(arquivo); // Voltar ao início do arquivo
+
+    // Ler e inserir na BSB
+    contador = 0;
+    inicio = clock();
+    while (fgets(linha, sizeof(linha), arquivo) != NULL)
+    {
+        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
+               candidato.estado, candidato.cidade, candidato.numero_urna, candidato.cargo,
+               candidato.nome, candidato.nome_urna, candidato.sigla_partido,
+               candidato.genero, candidato.grau_instrucao, candidato.cor_raca);
+        bsb_inserir(*bsb, candidato);
+        contador++;
+        // printf("Inserido %d\n", contador); //linha de teste de funcionamento
+    }
+    fim = clock();
+    *tempo_bsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Foram lidos %d candidatos na BSB.\n", contador);
+
+    fclose(arquivo);
+}
+
 // Funções de leitura e escrita de arquivos
 // ESTADO;CIDADE;NR_CANDIDATO;CARGO;NM_CANDIDATO;NM_URNA_CANDIDATO;SG_PARTIDO;GENERO;GRAU_INSTRUCAO;COR_RACA
-int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos)
+/*int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos)
 {
     FILE *arquivo = fopen(nomeArquivo, "r");
     if (arquivo == NULL)
@@ -390,7 +421,7 @@ int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_can
 
     fclose(arquivo);
     return 1;
-}
+}*/
 
 void imprimirCandidatoCompleto(Candidato c)
 {
@@ -412,12 +443,12 @@ void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double 
     int opcao_menu = -1;
     do
     {
-        printf("\nEscolha uma opcao de listagem do resultado da filtragem:\n");
+        printf("\nEscolha uma opcao de listagem do resultado:\n");
         printf("1 - Listar pela ABB\n");
         printf("2 - Listar pela AVL\n");
         printf("3 - Listar pela BSB\n");
         printf("4 - Listar tempos de execucao\n");
-        printf("0 - Nao listar (sair)\n");
+        printf("0 - Nao listar (voltar/prosseguir)\n");
         scanf("%d", &opcao_menu);
 
         switch (opcao_menu)
@@ -506,7 +537,7 @@ void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double 
             break;
 
         case 0:
-            printf("Saindo...\n");
+            // printf("Voltando...\n");
             break;
         default:
             printf("Opcao invalida.\n");
@@ -626,4 +657,295 @@ void criar_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, char estad
     {
         bsb_liberar(resultado_bsb);
     }
+}
+
+// Função para validar a entrada em todas as estruturas
+int validar_entrada_em_todas(char chave, char entrada[], Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb)
+{
+    // Variáveis para indicar se o valor foi encontrado em cada estrutura
+    int encontrado_abb = 0;
+    int encontrado_avl = 0;
+    int encontrado_bsb = 0;
+
+    // ABB
+    encontrado_abb = (percorrer_e_comparar_abb(abb->raiz, entrada, chave)) ? 1 : 0;
+
+    // AVL
+    encontrado_avl = (percorrer_e_comparar_avl(avl->raiz, entrada, chave)) ? 1 : 0;
+
+    // BSB
+    encontrado_bsb = (percorrer_e_comparar_bsb(bsb, entrada, chave)) ? 1 : 0;
+
+    // Verificar se encontrou em todas as estruturas
+    if (encontrado_abb && encontrado_avl && encontrado_bsb)
+    {
+        return 3; // Encontrou em todas
+    }
+
+    return 0; // Não encontrou em todas as estruturas
+}
+
+int percorrer_e_comparar_abb(No_abb *no, char *valor, char chave)
+{
+    if (no == NULL)
+    {
+        return 0; // Valor não encontrado nesta subárvore
+    }
+
+    int cmp;
+    if (chave == 'E')
+    {
+        cmp = strcmp(no->candidato.estado, valor);
+    }
+    else if (chave == 'C')
+    {
+        cmp = strcmp(no->candidato.cidade, valor);
+    }
+    else if (chave == 'P')
+    {
+        cmp = strcmp(no->candidato.sigla_partido, valor);
+    }
+    else if (chave == 'G')
+    {
+        cmp = strcmp(no->candidato.genero, valor);
+    }
+    else if (chave == 'R')
+    {
+        cmp = strcmp(no->candidato.cor_raca, valor);
+    }
+    else
+    {
+        return 0; // Chave inválida
+    }
+
+    if (cmp == 0)
+    {
+        return 1; // Valor encontrado!
+    }
+
+    // Continua percorrendo a árvore recursivamente
+    if (cmp > 0)
+    {
+        return percorrer_e_comparar_abb(no->esq, valor, chave);
+    }
+    else
+    {
+        return percorrer_e_comparar_abb(no->dir, valor, chave);
+    }
+}
+
+int percorrer_e_comparar_avl(No_avl *no, char *valor, char chave)
+{
+    if (no == NULL)
+    {
+        return 0; // Valor não encontrado nesta subárvore
+    }
+
+    int cmp;
+    if (chave == 'E')
+    {
+        cmp = strcmp(no->candidato.estado, valor);
+    }
+    else if (chave == 'C')
+    {
+        cmp = strcmp(no->candidato.cidade, valor);
+    }
+    else if (chave == 'P')
+    {
+        cmp = strcmp(no->candidato.sigla_partido, valor);
+    }
+    else if (chave == 'G')
+    {
+        cmp = strcmp(no->candidato.genero, valor);
+    }
+    else if (chave == 'R')
+    {
+        cmp = strcmp(no->candidato.cor_raca, valor);
+    }
+    else
+    {
+        return 0; // Chave inválida
+    }
+
+    if (cmp == 0)
+    {
+        return 1; // Valor encontrado!
+    }
+
+    // Continua percorrendo a árvore recursivamente
+    if (cmp > 0)
+    {
+        return percorrer_e_comparar_avl(no->esq, valor, chave);
+    }
+    else
+    {
+        return percorrer_e_comparar_avl(no->dir, valor, chave);
+    }
+}
+
+int percorrer_e_comparar_bsb(Vetor_bsb *vet, char *valor, char chave)
+{
+    for (int i = 0; i < vet->tamanho; i++)
+    {
+        int cmp;
+        if (chave == 'E')
+        {
+            cmp = strcmp(vet->candidatos[i].estado, valor);
+        }
+        else if (chave == 'C')
+        {
+            cmp = strcmp(vet->candidatos[i].cidade, valor);
+        }
+        else if (chave == 'P')
+        {
+            cmp = strcmp(vet->candidatos[i].sigla_partido, valor);
+        }
+        else if (chave == 'G')
+        {
+            cmp = strcmp(vet->candidatos[i].genero, valor);
+        }
+        else if (chave == 'R')
+        {
+            cmp = strcmp(vet->candidatos[i].cor_raca, valor);
+        }
+        else
+        {
+            return 0; // Chave inválida
+        }
+
+        if (cmp == 0)
+        {
+            return 1; // Valor encontrado!
+        }
+    }
+    return 0; // Valor não encontrado no vetor
+}
+
+void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_abb)
+{
+    char estado[MAX_TAM_ESTADO];
+    char cidade[MAX_TAM_CIDADE];
+    char partido[MAX_TAM_SIGLA_PARTIDO];
+    char genero[MAX_TAM_GENERO];
+    char cor_raca[MAX_TAM_COR_RACA];
+
+    // melhor: aceita somente maiusculos atualmente e nao faz nenhuma validação
+
+    printf("\nFiltros de Listagem (digite NA para ignorar o filtro):\n");
+    printf("Estado: ");
+    setbuf(stdin, NULL);
+    scanf("%s", estado);
+
+    for (int i = 0; estado[i]; i++)
+    {
+        estado[i] = toupper(estado[i]);
+    }
+
+    if (strcmp(estado, "NA") != 0)
+    {
+        int valido = validar_entrada_em_todas('E', estado, arv_abb, arv_avl, vet_abb);
+        if (valido == 3)
+        {
+            printf("Estado encontrado e valido.\n");
+        }
+        else
+        {
+            printf("Estado nao encontrado ou invalido. Campo ESTADO sera desconsiderado na filtragem.\n");
+            strcpy(estado, "NA");
+        }
+    }
+
+    printf("\nCidade: ");
+    setbuf(stdin, NULL);
+    scanf("%[^\n]s", cidade);
+
+    for (int i = 0; cidade[i]; i++)
+    {
+        cidade[i] = toupper(cidade[i]);
+    }
+
+    if (strcmp(cidade, "NA") != 0)
+    {
+        int valido = validar_entrada_em_todas('C', cidade, arv_abb, arv_avl, vet_abb);
+        if (valido == 3)
+        {
+            printf("Cidade encontrada e valida.\n");
+        }
+        else
+        {
+            printf("Cidade nao encontrada ou invalida. Campo CIDADE sera desconsiderado na filtragem.\n");
+            strcpy(cidade, "NA");
+        }
+    }
+
+    printf("\nPartido: ");
+    setbuf(stdin, NULL);
+    scanf("%s", partido);
+
+    for (int i = 0; partido[i]; i++)
+    {
+        partido[i] = toupper(partido[i]);
+    }
+
+    if (strcmp(partido, "NA") != 0)
+    {
+        int valido = validar_entrada_em_todas('P', partido, arv_abb, arv_avl, vet_abb);
+        if (valido == 3)
+        {
+            printf("Partido encontrado e valido.\n");
+        }
+        else
+        {
+            printf("Partido nao encontrado ou invalido. Campo PARTIDO sera desconsiderado na filtragem.\n");
+            strcpy(partido, "NA");
+        }
+    }
+
+    printf("\nGenero (Masculino ou Feminino): ");
+    setbuf(stdin, NULL);
+    scanf("%s", genero);
+
+    for (int i = 0; genero[i]; i++)
+    {
+        genero[i] = toupper(genero[i]);
+    }
+
+    if (strcmp(genero, "NA") != 0)
+    {
+        int valido = validar_entrada_em_todas('G', genero, arv_abb, arv_avl, vet_abb);
+        if (valido == 3)
+        {
+            printf("Genero encontrado e valido.\n");
+        }
+        else
+        {
+            printf("Genero nao encontrado ou invalido. Campo GENERO sera desconsiderado na filtragem.\n");
+            strcpy(genero, "NA");
+        }
+    }
+
+    printf("\nCor/Raca: ");
+    setbuf(stdin, NULL);
+    scanf("%[^\n]s", cor_raca);
+
+    for (int i = 0; cor_raca[i]; i++)
+    {
+        cor_raca[i] = toupper(cor_raca[i]);
+    }
+
+    if (strcmp(cor_raca, "NA") != 0)
+    {
+        int valido = validar_entrada_em_todas('R', cor_raca, arv_abb, arv_avl, vet_abb);
+        if (valido == 3)
+        {
+            printf("Cor/Raca encontrada e valida.\n");
+        }
+        else
+        {
+            printf("Cor/Raca nao encontrada ou invalida. Campo COR/RACA será desconsiderado na filtragem.\n");
+            strcpy(cor_raca, "NA");
+        }
+    }
+
+    criar_listagem(arv_abb, arv_avl, vet_abb, estado, cidade, partido, genero, cor_raca);
 }
