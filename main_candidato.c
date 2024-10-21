@@ -37,11 +37,14 @@ int main()
     scanf("%d", &opcao);
     if (opcao == 1)
     {
-        strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\eleicoes2024.txt");
+        //strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\eleicoes2024.txt");
+        strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\eleicoes2024.txt");
+
     }
     else if (opcao == 2)
     {
-        strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        //strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
     }
     else
     {
