@@ -35,7 +35,16 @@ void imprimir_candidato_completo_abb(Candidato c)
 
 void imprimir_candidato_simples_abb(Candidato c)
 {
-    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
+
+    //printf("Nome: %s\n", c.nome);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("--------------------\n");
+    //printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }
 
 // Funções da ABB
@@ -252,9 +261,28 @@ void abb_imprimir_pre_ordem_no(No_abb *no)
 {
     if (no != NULL)
     {
-        printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
+        //printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
+        printf("Candidato: \n");
+        printf("Nome: %s\n", no->candidato.nome);
+        printf("Cidade: %s\n", no->candidato.cidade);
+        printf("Estado: %s\n", no->candidato.estado);
+        printf("--------------------\n");
         abb_imprimir_pre_ordem_no(no->esq);
         abb_imprimir_pre_ordem_no(no->dir);
+    /*
+    printf("Nome: %s\n", c.nome);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("Genero: %s\n", c.genero);
+    printf("Grau de instrucao: %s\n", c.grau_instrucao);
+    printf("Cor/Raca: %s\n", c.cor_raca);
+    printf("--------------------\n");
+        */
+    
     }
 }
 
@@ -272,7 +300,12 @@ void abb_imprimir_pos_ordem_no(No_abb *no)
     {
         abb_imprimir_pos_ordem_no(no->esq);
         abb_imprimir_pos_ordem_no(no->dir);
-        printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
+         printf("Candidato: \n");
+        printf("Nome: %s\n", no->candidato.nome);
+        printf("Cidade: %s\n", no->candidato.cidade);
+        printf("Estado: %s\n", no->candidato.estado);
+        printf("--------------------\n");
+        //printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
     }
 }
 

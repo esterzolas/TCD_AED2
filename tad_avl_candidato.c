@@ -35,9 +35,28 @@ void imprimir_candidato_completo_avl(Candidato c)
 
 void imprimir_candidato_simples_avl(Candidato c)
 {
-    printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("--------------------\n");
+    //printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }
-
+ /*
+    printf("Nome: %s\n", c.nome);
+    printf("Nome na urna: %s\n", c.nome_urna);
+    printf("Numero: %s\n", c.numero_urna);
+    printf("Estado: %s\n", c.estado);
+    printf("Cidade: %s\n", c.cidade);
+    printf("Cargo: %s\n", c.cargo);
+    printf("Partido: %s\n", c.sigla_partido);
+    printf("Genero: %s\n", c.genero);
+    printf("Grau de instrucao: %s\n", c.grau_instrucao);
+    printf("Cor/Raca: %s\n", c.cor_raca);
+    printf("--------------------\n");
+        */
 int altura_no(No_avl *no)
 {
     if (no == NULL)
@@ -354,7 +373,12 @@ void avl_imprimir_pre_ordem_no(No_avl *no)
 {
     if (no != NULL)
     {
-        printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
+        printf("Candidato: \n");
+        printf("Nome: %s\n", no->candidato.nome);
+        printf("Cidade: %s\n", no->candidato.cidade);
+        printf("Estado: %s\n", no->candidato.estado);
+        printf("--------------------\n");
+        //printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
         avl_imprimir_pre_ordem_no(no->esq);
         avl_imprimir_pre_ordem_no(no->dir);
     }
@@ -374,7 +398,12 @@ void avl_imprimir_pos_ordem_no(No_avl *no)
     {
         avl_imprimir_pos_ordem_no(no->esq);
         avl_imprimir_pos_ordem_no(no->dir);
-        printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
+        printf("Candidato: \n");
+        printf("Nome: %s\n", no->candidato.nome);
+        printf("Cidade: %s\n", no->candidato.cidade);
+        printf("Estado: %s\n", no->candidato.estado);
+        printf("--------------------\n");
+        //printf("Candidato: %s - %s - %s\n", no->candidato.nome, no->candidato.cidade, no->candidato.estado);
     }
 }
 

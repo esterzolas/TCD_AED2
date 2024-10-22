@@ -146,10 +146,11 @@ int main()
             // Converte para tudo maiusculo
 
             // Pesquisa Binária
+            double tempo_bsb2 = 0;
             inicio = clock();
             sub_vet_bsb = filtrar_por_cidade_bsb(vet_bsb, cidade);
             fim = clock();
-            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            tempo_bsb2 = (double)(fim - inicio) / CLOCKS_PER_SEC;
             if (!bsb_vazia(sub_vet_bsb))
             {
                 bsb_imprimir(sub_vet_bsb);
@@ -158,13 +159,14 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
             }
-            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo);
+            //printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo);
 
             // Árvore Binária de Busca
+            double tempo_abb2 = 0;
             inicio = clock();
             sub_arv_abb = filtrar_por_cidade_abb(arv_abb, cidade);
             fim = clock();
-            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            tempo_abb2 = (double)(fim - inicio) / CLOCKS_PER_SEC;
             if (!abb_vazia(sub_arv_abb))
             {
                 abb_imprimir_in_ordem(sub_arv_abb);
@@ -173,13 +175,14 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
             }
-            printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo);
+            //printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo);
 
             // Árvore AVL
+            double tempo_avl2 = 0;
             inicio = clock();
             sub_arv_avl = filtrar_por_cidade_avl(arv_avl, cidade);
             fim = clock();
-            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            tempo_avl2 = (double)(fim - inicio) / CLOCKS_PER_SEC;
             if (!avl_vazia(sub_arv_avl))
             {
                 avl_imprimir_in_ordem(sub_arv_avl);
@@ -188,7 +191,9 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s.\n", cidade, estado);
             }
-            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
+            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo_bsb2);
+            printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo_abb2);
+            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo_avl2);
             opcao_menu = -1;
             break;
 
@@ -205,10 +210,11 @@ int main()
             scanf("%s", numero);
 
             // Pesquisa Binária
+            double tempobsb = 0;
             inicio = clock();
             sub_vet_bsb = filtrar_por_chave_bsb(vet_bsb, 'N', numero);
             fim = clock();
-            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            tempobsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
             if (!bsb_vazia(sub_vet_bsb))
             {
                 bsb_imprimir(sub_vet_bsb);
@@ -217,13 +223,14 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
             }
-            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo);
+            //printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempo);
 
             // Árvore Binária de Busca
+            double tempoabb = 0;
             inicio = clock();
             sub_arv_abb = filtrar_por_chave_abb(arv_abb, 'N', numero);
             fim = clock();
-            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            tempoabb = (double)(fim - inicio) / CLOCKS_PER_SEC;
             if (!abb_vazia(sub_arv_abb))
             {
                 abb_imprimir_in_ordem(sub_arv_abb);
@@ -232,12 +239,14 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
             }
+             //printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo);
 
             // Árvore AVL
+            double tempoavl = 0;
             inicio = clock();
             sub_arv_avl = filtrar_por_chave_avl(arv_avl, 'N', numero);
             fim = clock();
-            tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            tempoavl = (double)(fim - inicio) / CLOCKS_PER_SEC;
             if (!avl_vazia(sub_arv_avl))
             {
                 avl_imprimir_in_ordem(sub_arv_avl);
@@ -246,7 +255,9 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
             }
-            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempo);
+            printf("Tempo de busca por Pesquisa Binaria: %.6f segundos\n", tempobsb);
+            printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempoabb);
+            printf("Tempo de busca por Arvore AVL: %.6f segundos\n", tempoavl);
             opcao_menu = -1;
             break;
 
@@ -334,7 +345,7 @@ void ler_arquivo(char nome_arquivo[], Arvore_abb **abb, Arvore_avl **avl, Vetor_
                candidato.genero, candidato.grau_instrucao, candidato.cor_raca);
         bsb_inserir(*bsb, candidato);
         contador++;
-        // printf("Inserido %d\n", contador); //linha de teste de funcionamento
+        //printf("Inserido %d\n", contador); //linha de teste de funcionamento
     }
     fim = clock();
     *tempo_bsb = (double)(fim - inicio) / CLOCKS_PER_SEC;
