@@ -31,20 +31,20 @@ int main()
     printf("1 - eleicoes2024\n");
     printf("2 - subConjuntoEleicoes2024\n");
     printf("Opcao: ");
-    // colocar 3 sub conuntos no total? um de 50, outro de 500 e outro de 5000
 
     int opcao;
     scanf("%d", &opcao);
     if (opcao == 1)
     {
         //strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\eleicoes2024.txt");
-        strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\eleicoes2024.txt");
-
+        //strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\eleicoes2024.txt");
+        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\eleicoes2024.txt");
     }
     else if (opcao == 2)
     {
         //strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\subConjuntoEleicoes2024.txt");
-        strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        //strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
     }
     else
     {
@@ -82,9 +82,14 @@ int main()
         case 1:
             // melhorar para aceitar só o UFs BR
             printf("\nDigite o UF: ");
+            setbuf(stdin, NULL);
             scanf("%s", estado);
 
             // Converte para tudo maiusculo
+            for (int i = 0; estado[i]; i++)
+            {
+                estado[i] = toupper(estado[i]);
+            }
 
             // Pesquisa Binária
             double tempo_bsb = 0;
@@ -137,13 +142,23 @@ int main()
             break;
 
         case 2:
-            // mesma coisa aqui
             printf("\nDigite o UF: ");
+            setbuf(stdin, NULL);
             scanf("%s", estado);
+            // Converte para tudo maiusculo
+            for (int i = 0; estado[i]; i++)
+            {
+                estado[i] = toupper(estado[i]);
+            }
 
             printf("Digite a cidade: ");
+            setbuf(stdin, NULL);
             scanf(" %[^\n]", cidade);
             // Converte para tudo maiusculo
+            for (int i = 0; cidade[i]; i++)
+            {
+                cidade[i] = toupper(cidade[i]);
+            }
 
             // Pesquisa Binária
             double tempo_bsb2 = 0;
@@ -198,15 +213,26 @@ int main()
             break;
 
         case 3:
-            // mesma coisa aqui
             printf("\nDigite o UF: ");
+            setbuf(stdin, NULL);
             scanf("%s", estado);
+            // Converte para tudo maiusculo
+            for (int i = 0; estado[i]; i++)
+            {
+                estado[i] = toupper(estado[i]);
+            }
 
             printf("Digite a cidade: ");
+            setbuf(stdin, NULL);
             scanf(" %[^\n]", cidade);
             // Converte para tudo maiusculo
+            for (int i = 0; cidade[i]; i++)
+            {
+                cidade[i] = toupper(cidade[i]);
+            }
 
             printf("Digite o numero: ");
+            setbuf(stdin, NULL);
             scanf("%s", numero);
 
             // Pesquisa Binária
@@ -239,7 +265,7 @@ int main()
             {
                 printf("Nenhum candidato encontrado na cidade %s, estado %s, com o numero %s.\n", cidade, estado, numero);
             }
-             //printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo);
+            //printf("Tempo de busca por Arvore Binaria de Busca: %.6f segundos\n", tempo);
 
             // Árvore AVL
             double tempoavl = 0;
