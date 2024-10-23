@@ -269,20 +269,6 @@ void abb_imprimir_pre_ordem_no(No_abb *no)
         printf("--------------------\n");
         abb_imprimir_pre_ordem_no(no->esq);
         abb_imprimir_pre_ordem_no(no->dir);
-    /*
-    printf("Nome: %s\n", c.nome);
-    printf("Nome na urna: %s\n", c.nome_urna);
-    printf("Numero: %s\n", c.numero_urna);
-    printf("Estado: %s\n", c.estado);
-    printf("Cidade: %s\n", c.cidade);
-    printf("Cargo: %s\n", c.cargo);
-    printf("Partido: %s\n", c.sigla_partido);
-    printf("Genero: %s\n", c.genero);
-    printf("Grau de instrucao: %s\n", c.grau_instrucao);
-    printf("Cor/Raca: %s\n", c.cor_raca);
-    printf("--------------------\n");
-        */
-    
     }
 }
 

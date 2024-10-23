@@ -18,11 +18,6 @@ typedef struct Arvore_avl
     No_avl *raiz;
 } Arvore_avl;
 
-// Funções auxiliares
-//void imprimir_candidato_completo_avl(Candidato c);
-//void imprimir_candidato_simples_avl(Candidato c);
-//int comparar_candidatos_avl(Candidato c1, Candidato c2);
-
 // Funções de manipulação da AVL
 Arvore_avl *avl_criar();
 void avl_liberar(Arvore_avl *arv);

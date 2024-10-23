@@ -44,19 +44,7 @@ void imprimir_candidato_simples_avl(Candidato c)
     printf("--------------------\n");
     //printf("Nome na urna: %s; Numero: %s; Estado: %s; Cidade: %s; Cargo: %s\n", c.nome_urna, c.numero_urna, c.estado, c.cidade, c.cargo);
 }
- /*
-    printf("Nome: %s\n", c.nome);
-    printf("Nome na urna: %s\n", c.nome_urna);
-    printf("Numero: %s\n", c.numero_urna);
-    printf("Estado: %s\n", c.estado);
-    printf("Cidade: %s\n", c.cidade);
-    printf("Cargo: %s\n", c.cargo);
-    printf("Partido: %s\n", c.sigla_partido);
-    printf("Genero: %s\n", c.genero);
-    printf("Grau de instrucao: %s\n", c.grau_instrucao);
-    printf("Cor/Raca: %s\n", c.cor_raca);
-    printf("--------------------\n");
-        */
+
 int altura_no(No_avl *no)
 {
     if (no == NULL)

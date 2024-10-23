@@ -8,8 +8,6 @@
 #include "tad_bsb_candidato.h"
 
 // Funções de leitura e escrita de arquivos
-// int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos);
-Candidato *buscaBinariaCandidato(Candidato *vetor, int inicio, int fim, char *estado, char *cidade, char *numero);
 void imprimirCandidatoCompleto(Candidato c);
 void criar_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, char estado[], char cidade[], char partido[], char genero[], char cor_raca[]);
 void imprimir_listagem(Arvore_abb *abb, Arvore_avl *avl, Vetor_bsb *bsb, double tempo_abb, double tempo_avl, double tempo_bsb);
@@ -36,15 +34,15 @@ int main()
     scanf("%d", &opcao);
     if (opcao == 1)
     {
-        //strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\eleicoes2024.txt");
+        strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\eleicoes2024.txt");
         //strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\eleicoes2024.txt");
-        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\eleicoes2024.txt");
+        //strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\eleicoes2024.txt");
     }
     else if (opcao == 2)
     {
-        //strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        strcpy(nomeArquivo, "C:\\Users\\jeans\\OneDrive\\UFU\\Algoritmos e Estruturas 2\\Trabalho Final\\TCD_AED2\\subConjuntoEleicoes2024.txt");
         //strcpy(nomeArquivo, "F:\\Programas s2\\aed2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
-        strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
+        //strcpy(nomeArquivo, "C:\\Users\\ester\\OneDrive\\facul\\5SEMESTRE\\AED2\\TCD_AED2\\subConjuntoEleicoes2024.txt");
     }
     else
     {
@@ -908,85 +906,3 @@ void listagem_case(Arvore_abb *arv_abb, Arvore_avl *arv_avl, Vetor_bsb *vet_bsb)
 
     criar_listagem(arv_abb, arv_avl, vet_bsb, estado, cidade, partido, genero, cor_raca);
 }
-
-//parte da esterzolas sobre a leitura do arquivo que mudei um pouco. aguardando feedback para poder excluir tudo abaixo ou não.
-
-// Funções de leitura e escrita de arquivos
-// ESTADO;CIDADE;NR_CANDIDATO;CARGO;NM_CANDIDATO;NM_URNA_CANDIDATO;SG_PARTIDO;GENERO;GRAU_INSTRUCAO;COR_RACA
-/*int lerArquivoCandidatos(char *nomeArquivo, Candidato **candidatos, int *num_candidatos)
-{
-    FILE *arquivo = fopen(nomeArquivo, "r");
-    if (arquivo == NULL)
-    {
-        printf("Erro ao abrir o arquivo %s!\n", nomeArquivo);
-        return 0;
-    }
-
-    *candidatos = (Candidato *)malloc(MAX_CANDIDATOS * sizeof(Candidato));
-    if (*candidatos == NULL)
-    {
-        printf("Erro ao alocar memória para os candidatos!\n");
-        fclose(arquivo);
-        return 0;
-    }
-
-    *num_candidatos = 0;
-    char linha[512];
-    while (fgets(linha, sizeof(linha), arquivo))
-    {
-        sscanf(linha, "%2s;%99[^;];%5[^;];%19[^;];%99[^;];%99[^;];%9[^;];%19[^;];%39[^;];%9[^\n]",
-               (*candidatos)[*num_candidatos].estado, (*candidatos)[*num_candidatos].cidade,
-               (*candidatos)[*num_candidatos].numero_urna, (*candidatos)[*num_candidatos].cargo,
-               (*candidatos)[*num_candidatos].nome, (*candidatos)[*num_candidatos].nome_urna,
-               (*candidatos)[*num_candidatos].sigla_partido, (*candidatos)[*num_candidatos].genero,
-               (*candidatos)[*num_candidatos].grau_instrucao, (*candidatos)[*num_candidatos].cor_raca);
-        (*num_candidatos)++;
-    }
-
-    fclose(arquivo);
-    return 1;
-}*/
-
-/*if (!lerArquivoCandidatos(nomeArquivo, &candidatos, &num_candidatos))
-    {
-        return 1;
-    }
-
-    clock_t inicio, fim;
-    double tempo;
-
-    // Pesquisa Binária
-    inicio = clock();
-    Vetor_bsb *vet_bsb = bsb_criar();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        bsb_inserir(vet_bsb, candidatos[i]);
-    }
-    fim = clock();
-    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-
-    // bsb_imprimir(vet_bsb);
-    printf("\nForam lidos %d candidatos do arquivo %s.\n", num_candidatos, nomeArquivo);
-    printf("Tempo de ordenacao por Pesquisa Binaria: %.6f segundos\n", tempo);
-
-    // Árvore Binária de Busca
-    Arvore_abb *arv_abb = abb_criar();
-    inicio = clock();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        abb_inserir(arv_abb, candidatos[i]);
-    }
-    fim = clock();
-    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenacao por Arvore Binaria de Busca: %.6f segundos\n", tempo);
-
-    // Árvore AVL
-    Arvore_avl *arv_avl = avl_criar();
-    inicio = clock();
-    for (int i = 0; i < num_candidatos; i++)
-    {
-        avl_inserir(arv_avl, candidatos[i]);
-    }
-    fim = clock();
-    tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Tempo de ordenacao por Arvore AVL: %.6f segundos\n", tempo);*/

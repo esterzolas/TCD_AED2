@@ -41,11 +41,6 @@ typedef struct Arvore_abb
     No_abb *raiz;
 } Arvore_abb;
 
-// Funções auxiliares
-//void imprimir_candidato_completo_abb(Candidato c);
-//void imprimir_candidato_simples_abb(Candidato c);
-//int comparar_candidatos_abb(Candidato c1, Candidato c2);
-
 // Funções de manipulação da ABB
 Arvore_abb *abb_criar();
 void abb_liberar(Arvore_abb *arv);
